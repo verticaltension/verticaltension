@@ -24,7 +24,7 @@ export default function Contact() {
     event.preventDefault();
     setStatus("sending");
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("https://api.verticaltension.com/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -44,14 +44,14 @@ export default function Contact() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="badge">Contact</span>
-            <h1>Start a conversation.</h1>
+            <h1>Start a Conversation.</h1>
             <p>
               We welcome partnerships, reviewer inquiries, and distribution
               requests. Share a concise note and the nature of your proposal.
             </p>
           </div>
           <div className="hero-panel">
-            <h2>Direct channels</h2>
+            <h2>Direct Channels</h2>
             <ul>
               <li>inquiries@verticaltension.com</li>
               <li>Berlin, DE</li>
@@ -64,7 +64,7 @@ export default function Contact() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <h2>Send a message</h2>
+            <h2>Send a Message</h2>
             <p>
               Messages are captured via the Vertical Tension Press inbox. You
               will receive a response within a few days.

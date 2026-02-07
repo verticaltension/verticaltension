@@ -12,7 +12,7 @@ export default function Shop() {
     const loadCatalog = async () => {
       setStatus("loading");
       try {
-        const response = await fetch("/api/catalog");
+        const response = await fetch("https://api.verticaltension.com/api/catalog");
         if (!response.ok) {
           throw new Error("Catalog request failed");
         }
@@ -43,14 +43,14 @@ export default function Shop() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="badge">Catalog</span>
-            <h1>Shop the archive in motion.</h1>
+            <h1>Shop the Archive in Motion.</h1>
             <p>
               Limited runs, preorder drops, and direct editions. Each title is
               released with supporting research notes.
             </p>
           </div>
           <div className="hero-panel">
-            <h2>Release cadence</h2>
+            <h2>Release Cadence</h2>
             <ul>
               <li>Quarterly drops with early access bundles</li>
               <li>Collector printings for flagship volumes</li>
@@ -63,7 +63,7 @@ export default function Shop() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <h2>Featured titles</h2>
+            <h2>Featured Titles</h2>
             <p>
               Filter by series or discipline. The catalog is structured to scale
               as new volumes are published.

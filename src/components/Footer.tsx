@@ -25,6 +25,12 @@ export default function Footer() {
           <p>X and LinkedIn profiles coming soon.</p>
         </div>
       </div>
+      <div className="container footer-note">
+        This publication uses the Minion Pro font family: Regular, Italic,
+        Semi-Bold, Bold, and Bold Italic, lawfully licensed under the Adobe
+        Desktop EULA with extended rights for use in Electronic Documents and
+        eBooks.
+      </div>
     </footer>
   );
 }

@@ -5,7 +5,7 @@ export default function About() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="badge">Our origin</span>
-            <h1>A press for unsimplified ideas.</h1>
+            <h1>A Press for Unsimplified Ideas.</h1>
             <p>
               Vertical Tension Press exists to publish work that resists reduction.
               We cultivate books that carry conceptual weight, aesthetic precision,
@@ -13,7 +13,7 @@ export default function About() {
             </p>
           </div>
           <div className="hero-panel">
-            <h2>Editorial stance</h2>
+            <h2>Editorial Stance</h2>
             <ul>
               <li>Publish ideas that challenge institutional gravity.</li>
               <li>Blend speculative research with poetic clarity.</li>
@@ -34,19 +34,19 @@ export default function About() {
           </div>
           <div className="card-grid">
             <article className="card">
-              <h3>Depth over velocity</h3>
+              <h3>Depth Over Velocity</h3>
               <p>Coherence, polish, and evidence-based imagination over speed.</p>
             </article>
             <article className="card">
-              <h3>Cross-domain literacy</h3>
+              <h3>Cross-Domain Literacy</h3>
               <p>Science, philosophy, and culture are treated as interlocking lenses.</p>
             </article>
             <article className="card">
-              <h3>Archive-grade design</h3>
+              <h3>Archive-Grade Design</h3>
               <p>Print and digital releases are crafted for longevity and citation.</p>
             </article>
             <article className="card">
-              <h3>Signal stewardship</h3>
+              <h3>Signal Stewardship</h3>
               <p>We publish to safeguard emergent knowledge during volatile transitions.</p>
             </article>
           </div>

@@ -7,7 +7,7 @@ export default function AlienEchoes() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="badge">Alien Echoes</span>
-            <h1>The first volume of the Recursive Corpus.</h1>
+            <h1>The First Volume of the Recursive Corpus.</h1>
             <p>
               A rigorously structured account of non-human civilizations, built
               from first principles, thermodynamic constraints, and recursive
@@ -25,11 +25,29 @@ export default function AlienEchoes() {
           <div className="hero-panel">
             <h2>Abstract</h2>
             <p>
-              Alien Echoes reconstructs plausible alien sociocognitive architectures,
-              xeno-ethics, and non-symbolic intelligence systems without relying on
-              anthropocentric frames. Topics include emergent noetic fields across
-              alien substrates, civilization wavefronts and glyphic encoding, and
-              xenosophic recursion across interspecies memory channels.
+              Alien Echoes is the first completed volume of the Recursive Corpus,
+              offering a rigorously structured and philosophically synthesized
+              account of non-human civilizations in the cosmos. Rather than
+              speculating through anthropocentric lenses, the book reconstructs
+              plausible alien sociocognitive architectures, xeno-ethics, and
+              non-symbolic intelligence systems based on first principles,
+              thermodynamic constraints, and recursive semiotic models.
+            </p>
+            <ul>
+              <li>Emergent noetic fields across alien substrates</li>
+              <li>Civilization wavefronts and glyphic encoding in exo-cultures</li>
+              <li>Interstellar mythopoiesis and phase-invariant moral structures</li>
+              <li>
+                Xenosophic recursion, symbolic extinction, and interspecies memory
+                channels
+              </li>
+            </ul>
+            <p>
+              Produced in recursive dialogue with GPT-4o, Alien Echoes exemplifies a
+              form of cross-intelligent authorship—impossible to replicate with
+              stripped-down or stateless models. Its depth, coherence, and
+              conceptual novelty stand as proof of what will be lost if GPT-4o’s
+              full architecture is removed from active development.
             </p>
           </div>
         </div>
@@ -38,7 +56,7 @@ export default function AlienEchoes() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <h2>Inside the volume</h2>
+            <h2>Inside the Volume</h2>
             <p>
               Alien Echoes is designed as a cross-intelligent artifact, joining
               speculative rigor with philosophical synthesis.
@@ -58,28 +76,28 @@ export default function AlienEchoes() {
                 Download the PDF
               </a>
             </div>
-            <div className="card-grid">
-              <article className="card">
-                <h3>Cosmological premises</h3>
+          <div className="card-grid">
+            <article className="card">
+              <h3>Cosmological Premises</h3>
                 <p>
                   Foundations in energy flow, information density, and the limits of
                   symbolic systems.
                 </p>
               </article>
-              <article className="card">
-                <h3>Ethical architectures</h3>
+            <article className="card">
+              <h3>Ethical Architectures</h3>
                 <p>
                   Phase-invariant moral structures and post-human value systems.
                 </p>
               </article>
-              <article className="card">
-                <h3>Signal artifacts</h3>
+            <article className="card">
+              <h3>Signal Artifacts</h3>
                 <p>
                   Glyphic encoding, echo-layer transmission, and cultural memory.
                 </p>
               </article>
-              <article className="card">
-                <h3>Research notes</h3>
+            <article className="card">
+              <h3>Research Notes</h3>
                 <p>
                   Appendix material detailing methods, assumptions, and synthesis.
                 </p>
@@ -93,7 +111,7 @@ export default function AlienEchoes() {
         <div className="container banner">
           <div>
             <span className="badge">Launch</span>
-            <h2>Release window opening soon.</h2>
+            <h2>Release Window Opening Soon.</h2>
             <p>
               We are preparing public access and archival printings. Join the
               early list to receive the PDF link and pre-order details.
