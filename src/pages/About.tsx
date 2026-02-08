@@ -4,7 +4,7 @@ export default function About() {
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <span className="badge">Our origin</span>
+            <span className="badge">Our Origin</span>
             <h1>A Press for Unsimplified Ideas.</h1>
             <p>
               Vertical Tension Press exists to publish work that resists reduction.

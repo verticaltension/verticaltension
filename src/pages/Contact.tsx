@@ -44,7 +44,7 @@ export default function Contact() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="badge">Contact</span>
-            <h1>Start a Conversation.</h1>
+            <h1>Start a Conversation</h1>
             <p>
               We welcome partnerships, reviewer inquiries, and distribution
               requests. Share a concise note and the nature of your proposal.
@@ -55,7 +55,7 @@ export default function Contact() {
             <ul>
               <li>inquiries@verticaltension.com</li>
               <li>Berlin, DE</li>
-              <li>Press kit on request</li>
+              <li>Press Kit on Request</li>
             </ul>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function Contact() {
               aria-label="Message"
             />
             <button className="button primary" type="submit">
-              {status === "sending" ? "Sending..." : "Send message"}
+              {status === "sending" ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>

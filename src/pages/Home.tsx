@@ -510,7 +510,7 @@ export default function Home() {
             </p>
           </div>
           <Link className="button primary" to="/alien-echoes">
-            View the landing page
+            View the Landing Page
           </Link>
         </div>
       </section>

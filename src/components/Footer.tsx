@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="site-footer">
@@ -22,7 +24,51 @@ export default function Footer() {
         </div>
         <div>
           <strong>Follow</strong>
-          <p>X and LinkedIn profiles coming soon.</p>
+          <p>
+            <a
+              href="https://www.linkedin.com/in/marvin-g-johnson-246ba4226/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              LinkedIn
+            </a>
+          </p>
+          <p>
+            <a
+              href="https://x.com/verticaltension"
+              target="_blank"
+              rel="noreferrer"
+            >
+              X
+            </a>
+          </p>
+          <p>
+            <a
+              href="https://www.instagram.com/verticaltensionpress/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Instagram
+            </a>
+          </p>
+        </div>
+        <div>
+          <strong>Legal</strong>
+          <p>
+            <Link to="/impressum">Impressum</Link>
+          </p>
+          <p>
+            <Link to="/privacy">Datenschutz</Link>
+          </p>
+          <p>
+            <Link to="/terms">AGB</Link>
+          </p>
+          <p>
+            <Link to="/withdrawal">Widerruf</Link>
+          </p>
+          <p>
+            <Link to="/legal">Rechtlicher Überblick</Link>
+          </p>
         </div>
       </div>
       <div className="container footer-note">

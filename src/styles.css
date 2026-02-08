@@ -311,6 +311,12 @@ main {
   margin: 0;
 }
 
+.section-note {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .card-grid {
   display: grid;
   gap: 24px;
@@ -384,6 +390,34 @@ main {
 .card h3 {
   font-family: var(--serif);
   margin-top: 0;
+}
+
+.catalog-subhead {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  margin: 32px 0 16px;
+}
+
+.catalog-list {
+  display: grid;
+  gap: 18px;
+}
+
+.catalog-item {
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid rgba(11, 11, 12, 0.08);
+}
+
+.catalog-item h3 {
+  font-family: var(--serif);
+  margin: 0 0 10px;
+}
+
+.catalog-item p {
+  margin: 0;
+  line-height: 1.6;
 }
 
 .card ul {

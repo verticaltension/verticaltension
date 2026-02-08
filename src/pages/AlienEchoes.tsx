@@ -15,10 +15,10 @@ export default function AlienEchoes() {
             </p>
             <div className="button-row">
               <a className="button primary" href="mailto:inquiries@verticaltension.com">
-                Request a review copy
+                Request a Review Copy
               </a>
               <a className="button ghost" href="/alien-echoes-draft1.pdf">
-                Read the draft PDF
+                Read the Draft PDF
               </a>
             </div>
           </div>
@@ -111,14 +111,14 @@ export default function AlienEchoes() {
         <div className="container banner">
           <div>
             <span className="badge">Launch</span>
-            <h2>Release Window Opening Soon.</h2>
+            <h2>Release Window Opening Soon</h2>
             <p>
               We are preparing public access and archival printings. Join the
               early list to receive the PDF link and pre-order details.
             </p>
           </div>
           <a className="button primary" href="mailto:inquiries@verticaltension.com">
-            Join the early list
+            Join the Early List
           </a>
         </div>
       </section>
