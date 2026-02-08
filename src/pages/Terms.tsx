@@ -25,6 +25,10 @@ export default function Terms() {
 
       <section className="section">
         <div className="container">
+          <div className="section-head">
+            <h2>AGB (Deutsch)</h2>
+            <p>Platzhaltertext für die AGB in deutscher Sprache.</p>
+          </div>
           <div className="card">
             <p>
               AGB sind sehr individuell (je nach Branche). Für Fernabsatzverträge
@@ -35,6 +39,26 @@ export default function Terms() {
             <p className="section-note">
               Hinweis: Dies ist keine Rechtsberatung. Lassen Sie AGB individuell
               prüfen (z. B. durch Fachanwälte oder spezialisierte Anbieter).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <h2>Terms &amp; Conditions (English)</h2>
+            <p>Placeholder for your English terms and conditions.</p>
+          </div>
+          <div className="card">
+            <p>
+              Terms must be tailored to your offer (B2B/B2C, digital content,
+              physical goods, services). For consumer distance contracts, provide
+              clear pre-contract information and a withdrawal policy.
+            </p>
+            <p className="section-note">
+              Note: This is not legal advice. Please obtain a proper review of
+              your final terms.
             </p>
           </div>
         </div>

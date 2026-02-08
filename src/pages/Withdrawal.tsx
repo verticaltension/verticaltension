@@ -24,6 +24,10 @@ export default function Withdrawal() {
 
       <section className="section">
         <div className="container">
+          <div className="section-head">
+            <h2>Widerrufsbelehrung (Deutsch)</h2>
+            <p>Platzhaltertext für die Widerrufsbelehrung.</p>
+          </div>
           <div className="card">
             <p>
               Widerrufsbelehrung und Muster-Widerrufsformular sind weitgehend
@@ -38,6 +42,27 @@ export default function Withdrawal() {
             <p className="section-note">
               Hinweis: Dies ist keine Rechtsberatung. Bitte fügen Sie die finale
               Widerrufsbelehrung mit juristischer Prüfung ein.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <h2>Right of Withdrawal (English)</h2>
+            <p>Placeholder for the English withdrawal policy.</p>
+          </div>
+          <div className="card">
+            <p>
+              Provide the statutory withdrawal information and model withdrawal
+              form for consumer distance contracts. Ensure the content is easily
+              accessible. From 19 June 2026, a visible withdrawal button is
+              required for relevant consumer contracts.
+            </p>
+            <p className="section-note">
+              Note: This is not legal advice. Please have the final withdrawal
+              policy reviewed.
             </p>
           </div>
         </div>

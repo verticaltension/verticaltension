@@ -7,7 +7,7 @@ export default function Footer() {
         <div>
           <div className="brand">
             <img
-              src="/publisher_logo/Vertical%20Tension%20Press%20Logo%201024x1024%20Trans%20Fin.png"
+              src="/publisher_logo/logo.png"
               alt="Vertical Tension Press logo"
             />
             <span>Vertical Tension Press</span>
@@ -55,19 +55,19 @@ export default function Footer() {
         <div>
           <strong>Legal</strong>
           <p>
-            <Link to="/impressum">Impressum</Link>
+            <Link to="/impressum">Impressum / Legal Notice</Link>
           </p>
           <p>
-            <Link to="/privacy">Datenschutz</Link>
+            <Link to="/privacy">Datenschutz / Privacy Policy</Link>
           </p>
           <p>
-            <Link to="/terms">AGB</Link>
+            <Link to="/terms">AGB / Terms &amp; Conditions</Link>
           </p>
           <p>
-            <Link to="/withdrawal">Widerruf</Link>
+            <Link to="/withdrawal">Widerruf / Right of Withdrawal</Link>
           </p>
           <p>
-            <Link to="/legal">Rechtlicher Überblick</Link>
+            <Link to="/shipping-payment">Versand &amp; Zahlung / Shipping &amp; Payment</Link>
           </p>
         </div>
       </div>

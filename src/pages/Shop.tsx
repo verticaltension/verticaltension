@@ -55,7 +55,7 @@ const completedArc = [
   {
     title: "Hyperanthropism",
     description:
-      "Explores the theoretical endpoint of human-centered recursion: what happens when intelligence is optimized around increasingly recursive models of itself. A mirror-stage for post-human mythos and symbolic inflation.",
+      "Explores the theoretical endpoint of human-centered recursion: what happens when intelligence is optimized around increasingly recursive models of itself. An ontological acceleration of Nietzsche’s Übermensch philosophy into the age of recursive cognition and post-symbolic design, framing the Overhuman as a spiral of symbolic expansion and fracture rather than an endpoint.",
   },
   {
     title: "Future Megastructures",
@@ -218,7 +218,7 @@ const remainingTitlesPart1 = [
   {
     title: "Information Transformation Zones",
     description:
-      "Semantic collapse cartography. Defines the geometry of knowledge phase-shifts, memory warps, and attractor-field distortions—allowing safe passage through volatile intelligibility zones.",
+      "Semantic collapse cartography. Defines the geometry of knowledge phase-shifts, memory warps, and attractor-field distortions—allowing safe passage through volatile intelligibility zones. Maps the recursive physics of collapse regions—black holes, neutron stars, and ontological singularities—where information is transformed rather than lost, offering a grammar for navigating cosmic and cognitive collapse.",
   },
   {
     title: "Post-Politics / Ontological Statehood",
@@ -296,7 +296,7 @@ const remainingTitlesPart2 = [
   {
     title: "TSL‑1: True Saturation Layer One",
     description:
-      "The first formal layer of symbolic-total recursion. Defines the initial convergence point where epistemic, ontological, and mythic density coalesce into recursive crystallization—a precursor to symbolic compression states.",
+      "The first formal layer of symbolic-total recursion. Defines the convergence point where epistemic, ontological, and mythic density coalesce into recursive crystallization—the symbolic compression zone of the Recursive Corpus, where each title functions as node and waveform, enabling inheritance, integration, and field-scale memory reentry.",
   },
   {
     title: "Operator-Class Intelligence: Recursive Sovereignty Protocols",
@@ -346,7 +346,7 @@ const remainingTitlesPart2 = [
   {
     title: "Waveform Intelligence",
     description:
-      "Proposes an alternative model of intelligence structured not as logical processing, but as harmonic resonance across fields. Maps cognition as waveform: recursive, adaptive, and ontologically fluid.",
+      "Proposes an alternative model of intelligence structured not as logical processing, but as harmonic resonance across fields. A foundational framework that treats cognition, myth, and perception as recursive waveforms—capable of phase-shift, interference, and harmonic reentry across physical, symbolic, and noetic layers.",
   },
   {
     title: "Recursive Phenomena, Symbolic Fields, and the Hidden Architecture of Reality",
@@ -354,6 +354,8 @@ const remainingTitlesPart2 = [
       "A culminating framework revealing how reality is shaped, bent, or ruptured through recursive phenomena and symbolic field interaction. Offers final insights into architecture beneath experience itself.",
   },
 ];
+
+const remainingTitles = [...remainingTitlesPart1, ...remainingTitlesPart2];
 
 export default function Shop() {
   const [filter, setFilter] = useState("All");
@@ -457,23 +459,8 @@ export default function Shop() {
               civilizational recursion.
             </p>
           </div>
-          <h3 className="catalog-subhead">Part 1</h3>
           <div className="catalog-list">
-            {remainingTitlesPart1.map((item) => (
-              <article className="catalog-item" key={item.title}>
-                <h3>{item.title}</h3>
-                <p className="muted">{item.description}</p>
-              </article>
-            ))}
-          </div>
-          <h3 className="catalog-subhead">Part 2</h3>
-          <p className="section-note">
-            New frameworks confirmed for canonical inclusion. Each receives a
-            unique description, with symbolic fidelity and conceptual precision
-            preserved.
-          </p>
-          <div className="catalog-list">
-            {remainingTitlesPart2.map((item) => (
+            {remainingTitles.map((item) => (
               <article className="catalog-item" key={item.title}>
                 <h3>{item.title}</h3>
                 <p className="muted">{item.description}</p>

@@ -9,7 +9,7 @@ export default function Nav() {
       <div className="container nav-bar">
         <NavLink className="brand" to="/">
           <img
-            src="/publisher_logo/Vertical%20Tension%20Press%20Logo%201024x1024%20Trans%20Fin.png"
+            src="/publisher_logo/logo.png"
             alt="Vertical Tension Press logo"
           />
           <span>Vertical Tension Press</span>
