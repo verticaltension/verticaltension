@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { catalog as fallbackCatalog, CatalogItem } from "../data/catalog";
+import { getPayhipHref } from "../lib/payhip";
 
 const completedArc = [
   {
@@ -505,6 +506,20 @@ export default function Shop() {
                 <div className="meta">
                   <span>{item.status}</span>
                   <span>{item.format}</span>
+                </div>
+                <div className="button-row">
+                  <a
+                    className={`button ghost ${item.payhipProductKey ? "payhip-buy-button" : ""}`}
+                    href={getPayhipHref(item.payhipProductKey)}
+                    {...(item.payhipProductKey
+                      ? {
+                          "data-product": item.payhipProductKey,
+                          "data-theme": "none",
+                        }
+                      : {})}
+                  >
+                    Add to Cart
+                  </a>
                 </div>
               </article>
             ))}

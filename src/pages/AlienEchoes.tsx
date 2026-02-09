@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { getPayhipHref } from "../lib/payhip";
 
 export default function AlienEchoes() {
   return (
@@ -72,9 +73,14 @@ export default function AlienEchoes() {
                 <strong>Alien Echoes</strong>
                 <span>Draft 1 · PDF · 885 KB</span>
               </div>
-              <a className="button primary" href="/alien-echoes-draft1.pdf">
-                Download the PDF
-              </a>
+              <div className="button-row">
+                <a className="button primary" href="/alien-echoes-draft1.pdf">
+                  Download the PDF
+                </a>
+                <a className="button ghost" href={getPayhipHref()}>
+                  Add to Cart
+                </a>
+              </div>
             </div>
           <div className="card-grid">
             <article className="card">

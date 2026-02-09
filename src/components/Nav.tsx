@@ -48,6 +48,23 @@ export default function Nav() {
           />
           <span>Vertical Tension Press</span>
         </NavLink>
+        <nav className={`nav-links ${open ? "is-open" : ""}`}>
+          <NavLink to="/" end onClick={() => setOpen(false)}>
+            Home
+          </NavLink>
+          <NavLink to="/about" onClick={() => setOpen(false)}>
+            About
+          </NavLink>
+          <NavLink to="/shop" onClick={() => setOpen(false)}>
+            Shop
+          </NavLink>
+          <NavLink to="/alien-echoes" onClick={() => setOpen(false)}>
+            Alien Echoes
+          </NavLink>
+          <NavLink to="/contact" onClick={() => setOpen(false)}>
+            Contact
+          </NavLink>
+        </nav>
         <div className="nav-actions">
           <button
             className="theme-toggle"
@@ -66,23 +83,6 @@ export default function Nav() {
             Menu
           </button>
         </div>
-        <nav className={`nav-links ${open ? "is-open" : ""}`}>
-          <NavLink to="/" end onClick={() => setOpen(false)}>
-            Home
-          </NavLink>
-          <NavLink to="/about" onClick={() => setOpen(false)}>
-            About
-          </NavLink>
-          <NavLink to="/shop" onClick={() => setOpen(false)}>
-            Shop
-          </NavLink>
-          <NavLink to="/alien-echoes" onClick={() => setOpen(false)}>
-            Alien Echoes
-          </NavLink>
-          <NavLink to="/contact" onClick={() => setOpen(false)}>
-            Contact
-          </NavLink>
-        </nav>
       </div>
     </header>
   );

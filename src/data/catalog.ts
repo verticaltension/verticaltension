@@ -5,6 +5,7 @@ export type CatalogItem = {
   status: string;
   description: string;
   format: string;
+  payhipProductKey?: string;
 };
 
 export const catalog: CatalogItem[] = [
