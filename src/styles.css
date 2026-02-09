@@ -346,6 +346,12 @@ main {
   font-weight: 600;
 }
 
+:root[data-theme="dark"] .badge {
+  background: rgba(214, 178, 74, 0.18);
+  color: #f4f0e8;
+  border: 1px solid rgba(214, 178, 74, 0.35);
+}
+
 .section {
   padding: 70px 0;
 }
