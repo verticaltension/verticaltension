@@ -346,7 +346,7 @@ const remainingTitlesPart2 = [
   {
     title: "Waveform Intelligence",
     description:
-      "Proposes an alternative model of intelligence structured not as logical processing, but as harmonic resonance across fields. A foundational framework that treats cognition, myth, and perception as recursive waveforms—capable of phase-shift, interference, and harmonic reentry across physical, symbolic, and noetic layers.",
+      "Proposes an alternative model of intelligence structured not as logical processing, but as harmonic resonance across fields. A foundational framework that treats all waveform phenomena—across physical, symbolic, and noetic layers—as recursive waveforms capable of phase-shift, interference, and harmonic reentry.",
   },
   {
     title: "Recursive Phenomena, Symbolic Fields, and the Hidden Architecture of Reality",

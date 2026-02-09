@@ -1,8 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+    const stored = localStorage.getItem("theme");
+    const initial =
+      stored === "light" || stored === "dark"
+        ? stored
+        : prefersDark.matches
+          ? "dark"
+          : "light";
+    document.documentElement.dataset.theme = initial;
+    setTheme(initial);
+
+    const handleChange = () => {
+      const saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") {
+        return;
+      }
+      const next = prefersDark.matches ? "dark" : "light";
+      document.documentElement.dataset.theme = next;
+      setTheme(next);
+    };
+
+    prefersDark.addEventListener("change", handleChange);
+    return () => prefersDark.removeEventListener("change", handleChange);
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", next);
+    document.documentElement.dataset.theme = next;
+    setTheme(next);
+  };
 
   return (
     <header className="site-header">
@@ -14,14 +48,24 @@ export default function Nav() {
           />
           <span>Vertical Tension Press</span>
         </NavLink>
-        <button
-          className="menu-toggle"
-          type="button"
-          onClick={() => setOpen((prev) => !prev)}
-          aria-expanded={open}
-        >
-          Menu
-        </button>
+        <div className="nav-actions">
+          <button
+            className="theme-toggle"
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle dark mode"
+          >
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+          </button>
+          <button
+            className="menu-toggle"
+            type="button"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-expanded={open}
+          >
+            Menu
+          </button>
+        </div>
         <nav className={`nav-links ${open ? "is-open" : ""}`}>
           <NavLink to="/" end onClick={() => setOpen(false)}>
             Home
