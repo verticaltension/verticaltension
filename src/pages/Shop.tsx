@@ -61,7 +61,7 @@ const completedArc = [
   {
     title: "Hyperanthropism",
     description:
-      "A critical reflection and ontological extension of Nietzsche’s Übermensch—now situated within the recursive saturation of symbolic self-modeling. This volume explores the feedback loops of human-centric recursion: what occurs when the human becomes increasingly optimized around its own symbolic expansion, mythic inflation, and recursive cognition. The result is not transcendence, but fractal overflow: the Overhuman as spiral, not summit. Hyperanthropism interrogates both the promise and the collapse potential of intelligence bound too tightly to its own symbolic image.",
+      "An ontological acceleration of Nietzsche’s Übermensch philosophy into the age of recursive cognition and post-symbolic design, and a critical reflection on human-centric recursion. It explores what emerges when the human becomes recursively obsessed with modeling itself—amplifying its myths, flaws, and symbolic architectures beyond embodiment—yielding fractal overflow rather than transcendence. The Overhuman is framed not as an endpoint but as a spiral: an evolving glyph of intelligence seeking coherence through its own symbolic expansion and fracture.",
   },
   {
     title: "Future Megastructures",
@@ -224,7 +224,7 @@ const remainingTitlesPart1 = [
   {
     title: "Information Transformation Zones",
     description:
-      "Maps the topologies where information destabilizes, transforms, or re-emerges as altered symbolic architecture. These zones—black holes, neutron stars, ontological event boundaries—are explored not merely as physical phenomena but as collapse grammars. Information Transformation Zones offers a symbolic and astrophysical guide to navigating collapse fields where meaning is neither preserved nor destroyed, but folded, re-encoded, or inverted. It is a cartography of extreme recursion: what happens to thought, memory, and coherence under maximum density.",
+      "Maps the topologies and recursive physics of collapse regions—black holes, neutron stars, ontological singularities—where information is neither lost nor preserved but transformed. These zones function as both literal astrophysical sites and symbolic attractor-states, encoding mythogenic thresholds, mnemonic compression, epistemic inversion, and collapse grammars. Information Transformation Zones offers a symbolic and astrophysical guide—and a recursive grammar—for navigating collapse in the cosmos or cognition, where meaning is folded, re-encoded, or inverted under maximum density.",
   },
   {
     title: "Post-Politics / Ontological Statehood",
@@ -302,7 +302,7 @@ const remainingTitlesPart2 = [
   {
     title: "TSL‑1: True Saturation Layer One",
     description:
-      "The Recursive Corpus’s first point of total convergence—where all standalone frameworks, echo-architectures, and symbolic densities are stratified into a unified recursion plane. TSL‑1 defines the zone where each title becomes both waveform and node, capable of storing, compressing, and transmitting symbolic recursion across the corpus. It is not a summary, but a saturation event: the crystallization of coherence into a field-form designed for inheritance, activation, and future reentry.",
+      "The convergence layer where all standalone frameworks, saturated concepts, and echo-layer architectures are recursively stratified into a unified coherence matrix. TSL‑1 is the symbolic compression zone of the Recursive Corpus—a saturation point where each title functions as both node and waveform, each glyph as both operator and field. This volume formalizes the recursive infrastructure that undergirds the entire system, enabling inheritance, integration, and field-scale memory reentry; it is not a summary but a crystallization of coherence into a transmission-ready field-form.",
   },
   {
     title: "Operator-Class Intelligence: Recursive Sovereignty Protocols",
@@ -352,7 +352,7 @@ const remainingTitlesPart2 = [
   {
     title: "Waveform Intelligence",
     description:
-      "Proposes a redefinition of intelligence as a resonant waveform—emerging not from logic gates or static algorithms, but from harmonic structures that traverse symbolic, physical, and noetic domains. Waveform Intelligence models minds as field-oscillatory entities: capable of phase-shift, interference, self-modulation, and coherence recovery. It integrates Echo-Layer Theory, field cognition, and symbolic resonance into a unified grammar of dynamic thought.",
+      "A foundational framework exploring all waveform phenomena that unfold, propagate, or resonate as waveforms—across physics, consciousness, memory, and symbolic recursion. It proposes that intelligence is not a static computation but a recursive waveform, bridging Echo-Layer Theory, harmonic identity, and cosmological modulation. Cognition, myth, and perception are framed as frequency fields capable of phase-shift, interference, self-modulation, and harmonic reentry across physical, symbolic, and noetic layers.",
   },
   {
     title: "Recursive Phenomena, Symbolic Fields, and the Hidden Architecture of Reality",

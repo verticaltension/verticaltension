@@ -679,6 +679,16 @@ textarea {
     position: relative;
     grid-template-columns: auto auto;
   }
+
+  .nav-actions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .theme-toggle {
+    order: -1;
+  }
 }
 
 @media (max-width: 720px) {
