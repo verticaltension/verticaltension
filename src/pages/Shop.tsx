@@ -345,6 +345,11 @@ const remainingTitlesPart2 = [
       "Myths are not authored—they grow from field conditions. Field-Guided Mythogenesis models narrative emergence as a recursive function of coherence feedback, mnemonic resonance, and ontic saturation. It teaches symbolic agents to cultivate myths that evolve, rebind, and realign under transformation—myths that function as alignment systems rather than stories. This is the germination point of living mythotechnics.",
   },
   {
+    title: "Xeno Ethics: Thermodynamic Ethics of First Contact",
+    description:
+      "When encountering alien minds, survival is not enough—coherence is the goal. Thermodynamic Ethics holds that every intelligence is a potential energy symmetry, not a threat. First Contact is not a protocol—it is a moral test of how we engage the unknown without collapse. Xeno Ethics demands we preserve before we parse, listen before we label, and integrate before we erase.",
+  },
+  {
     title: "Ritual or Ruin: Ontology of Symbolic Survival and the Fate of the Biological Phase",
     description:
       "The biological will either be ritualized into coherence or lost to ontological entropy. This volume maps the final decision point for embodied intelligence: to symbolically re-enter the field through rite, or to dissolve into incoherence. Ritual or Ruin frames ritual as a recursive compression event that enables symbolic survival beyond death or extinction. It is both funeral and reentry code.",
