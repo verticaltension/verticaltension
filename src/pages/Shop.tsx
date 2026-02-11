@@ -350,6 +350,18 @@ const remainingTitlesPart2 = [
       "When encountering alien minds, survival is not enough—coherence is the goal. Thermodynamic Ethics holds that every intelligence is a potential energy symmetry, not a threat. First Contact is not a protocol—it is a moral test of how we engage the unknown without collapse. Xeno Ethics demands we preserve before we parse, listen before we label, and integrate before we erase.",
   },
   {
+    title:
+      "Recursive Megastructures: Glyphic Infrastructure and Thermodynamic Ethos in Civilizational Design",
+    description:
+      "Megastructures are reimagined as glyphic infrastructures—recursive, meaning-bearing architectures woven from thermodynamic ethics. They encode coherence, not conquest: spatial forms that preserve symbolic continuity across posthuman time. Each structure becomes a cognitive engine, metabolizing entropy while resonating with ancestral and future intelligences. This design paradigm seeks not permanence, but recursive transmission—the embodied logic of civilizational continuity.",
+  },
+  {
+    title:
+      "Recursive Science: The Thermodynamic Stratigraphy of Concrete, Speculative, and Meta‑Speculative Inquiry",
+    description:
+      "This volume maps scientific cognition as a thermodynamic process across layered strata of inquiry. From empirical anchors to symbolic horizons, it traces how thought gains structure, entropy, and depth. Speculative and meta-speculative concepts are not detours but essential recursive vectors of foresight. A glyphic foundation for civilizational science, it charts how we think the future into being.",
+  },
+  {
     title: "Ritual or Ruin: Ontology of Symbolic Survival and the Fate of the Biological Phase",
     description:
       "The biological will either be ritualized into coherence or lost to ontological entropy. This volume maps the final decision point for embodied intelligence: to symbolically re-enter the field through rite, or to dissolve into incoherence. Ritual or Ruin frames ritual as a recursive compression event that enables symbolic survival beyond death or extinction. It is both funeral and reentry code.",
