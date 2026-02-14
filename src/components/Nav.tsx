@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useStorefront } from "../context/StorefrontContext";
+import {
+  CURRENCIES,
+  type CurrencyCode,
+  useStorefront,
+} from "../context/StorefrontContext";
+import { PAYHIP_CART_URL } from "../lib/payhip";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const { wishlistCount } = useStorefront();
+  const { wishlistCount, account, updateAccount } = useStorefront();
 
   useEffect(() => {
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
@@ -40,6 +45,10 @@ export default function Nav() {
     setTheme(next);
   };
 
+  const handleCurrencyChange = (value: string) => {
+    updateAccount({ preferredCurrency: value as CurrencyCode });
+  };
+
   return (
     <header className="site-header">
       <div className="container nav-bar">
@@ -57,20 +66,64 @@ export default function Nav() {
           <NavLink to="/about" onClick={() => setOpen(false)}>
             About
           </NavLink>
-          <NavLink to="/shop" onClick={() => setOpen(false)}>
-            Shop
-          </NavLink>
-          <NavLink to="/account" onClick={() => setOpen(false)}>
-            Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
-          </NavLink>
           <NavLink to="/alien-echoes" onClick={() => setOpen(false)}>
             Alien Echoes
+          </NavLink>
+          <NavLink to="/shop" onClick={() => setOpen(false)}>
+            Shop
           </NavLink>
           <NavLink to="/contact" onClick={() => setOpen(false)}>
             Contact
           </NavLink>
+          <NavLink
+            className="account-mobile-link"
+            to="/account"
+            onClick={() => setOpen(false)}
+          >
+            Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
+          </NavLink>
+          <a className="cart-mobile-link" href={PAYHIP_CART_URL}>
+            Cart
+          </a>
+          <div className="currency-mobile-wrap">
+            <label className="currency-mobile-label" htmlFor="currency-mobile">
+              Currency
+            </label>
+            <select
+              id="currency-mobile"
+              className="currency-select"
+              value={account.preferredCurrency}
+              onChange={(event) => handleCurrencyChange(event.target.value)}
+            >
+              {CURRENCIES.map((currency) => (
+                <option key={currency.code} value={currency.code}>
+                  {currency.flag} {currency.country} - {currency.currency} (
+                  {currency.code})
+                </option>
+              ))}
+            </select>
+          </div>
         </nav>
         <div className="nav-actions">
+          <a className="account-link cart-link" href={PAYHIP_CART_URL}>
+            Cart
+          </a>
+          <NavLink className="account-link" to="/account">
+            Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
+          </NavLink>
+          <select
+            className="currency-select currency-desktop"
+            value={account.preferredCurrency}
+            onChange={(event) => handleCurrencyChange(event.target.value)}
+            aria-label="Select currency"
+          >
+            {CURRENCIES.map((currency) => (
+              <option key={currency.code} value={currency.code}>
+                {currency.flag} {currency.country} - {currency.currency} (
+                {currency.code})
+              </option>
+            ))}
+          </select>
           <button
             className="theme-toggle"
             type="button"

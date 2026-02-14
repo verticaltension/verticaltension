@@ -24,14 +24,54 @@ export type WishlistItem = {
 };
 
 export const CURRENCIES = [
-  { code: "USD", label: "US Dollar" },
-  { code: "EUR", label: "Euro" },
-  { code: "GBP", label: "British Pound" },
-  { code: "JPY", label: "Japanese Yen" },
-  { code: "CAD", label: "Canadian Dollar" },
-  { code: "AUD", label: "Australian Dollar" },
-  { code: "CHF", label: "Swiss Franc" },
-  { code: "CNY", label: "Chinese Yuan" },
+  {
+    code: "USD",
+    country: "United States",
+    currency: "US Dollar",
+    flag: "🇺🇸",
+  },
+  {
+    code: "EUR",
+    country: "Eurozone",
+    currency: "Euro",
+    flag: "🇪🇺",
+  },
+  {
+    code: "GBP",
+    country: "United Kingdom",
+    currency: "British Pound",
+    flag: "🇬🇧",
+  },
+  {
+    code: "JPY",
+    country: "Japan",
+    currency: "Japanese Yen",
+    flag: "🇯🇵",
+  },
+  {
+    code: "CAD",
+    country: "Canada",
+    currency: "Canadian Dollar",
+    flag: "🇨🇦",
+  },
+  {
+    code: "AUD",
+    country: "Australia",
+    currency: "Australian Dollar",
+    flag: "🇦🇺",
+  },
+  {
+    code: "CHF",
+    country: "Switzerland",
+    currency: "Swiss Franc",
+    flag: "🇨🇭",
+  },
+  {
+    code: "CNY",
+    country: "China",
+    currency: "Chinese Yuan",
+    flag: "🇨🇳",
+  },
 ] as const;
 
 export type CurrencyCode = (typeof CURRENCIES)[number]["code"];

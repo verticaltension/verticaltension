@@ -6,8 +6,7 @@ import { initDb, listCatalog, insertContact } from "./db.js";
 
 const app = express();
 const port = Number(process.env.PORT) || 4000;
-const trustProxy =
-  process.env.TRUST_PROXY === undefined || process.env.TRUST_PROXY === "1";
+const trustProxy = process.env.TRUST_PROXY === "1";
 
 if (trustProxy) {
   app.set("trust proxy", 1);
@@ -30,6 +29,14 @@ const configuredOrigins = parseCsv(process.env.CORS_ORIGINS || "");
 const allowedOrigins = new Set(
   configuredOrigins.length > 0 ? configuredOrigins : defaultOrigins
 );
+const toInt = (value, fallback) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
+};
+const RATE_LIMIT_GLOBAL_MAX = toInt(process.env.RATE_LIMIT_GLOBAL_MAX, 300);
+const RATE_LIMIT_HEALTH_MAX = toInt(process.env.RATE_LIMIT_HEALTH_MAX, 120);
+const RATE_LIMIT_CATALOG_MAX = toInt(process.env.RATE_LIMIT_CATALOG_MAX, 120);
+const RATE_LIMIT_CONTACT_MAX = toInt(process.env.RATE_LIMIT_CONTACT_MAX, 5);
 
 app.use(
   cors({
@@ -100,22 +107,22 @@ const createRateLimiter = ({ windowMs, max, skipMethods = new Set() }) => {
 
 const globalLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
-  max: 60,
+  max: RATE_LIMIT_GLOBAL_MAX,
   skipMethods: new Set(["OPTIONS"]),
 });
 const healthLimiter = createRateLimiter({
   windowMs: 60 * 1000,
-  max: 20,
+  max: RATE_LIMIT_HEALTH_MAX,
   skipMethods: new Set(["OPTIONS"]),
 });
 const catalogLimiter = createRateLimiter({
   windowMs: 60 * 1000,
-  max: 20,
+  max: RATE_LIMIT_CATALOG_MAX,
   skipMethods: new Set(["OPTIONS"]),
 });
 const contactLimiter = createRateLimiter({
   windowMs: 10 * 60 * 1000,
-  max: 2,
+  max: RATE_LIMIT_CONTACT_MAX,
   skipMethods: new Set(["OPTIONS"]),
 });
 

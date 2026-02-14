@@ -1,11 +1,10 @@
 import { type ChangeEvent } from "react";
-import CurrencyConverter from "../components/CurrencyConverter";
 import {
   CURRENCIES,
   type CurrencyCode,
   useStorefront,
 } from "../context/StorefrontContext";
-import { getPayhipHref, PAYHIP_STORE_URL } from "../lib/payhip";
+import { getPayhipHref } from "../lib/payhip";
 
 export default function Account() {
   const {
@@ -95,24 +94,14 @@ export default function Account() {
                 >
                   {CURRENCIES.map((currency) => (
                     <option key={currency.code} value={currency.code}>
-                      {currency.code} - {currency.label}
+                      {currency.flag} {currency.country} - {currency.currency} (
+                      {currency.code})
                     </option>
                   ))}
                 </select>
               </label>
             </form>
-            <div className="button-row">
-              <a
-                className="button ghost"
-                href={PAYHIP_STORE_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open Payhip Store
-              </a>
-            </div>
           </div>
-          <CurrencyConverter />
         </div>
       </section>
 

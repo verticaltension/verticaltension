@@ -1,16 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import CurrencyConverter from "../components/CurrencyConverter";
 import { useStorefront } from "../context/StorefrontContext";
 import { catalog as fallbackCatalog, CatalogItem } from "../data/catalog";
 import { completedArc, remainingTitles } from "../data/shopTitles";
 import { apiUrl } from "../lib/api";
-import { getPayhipHref, PAYHIP_STORE_URL } from "../lib/payhip";
+import { getPayhipHref } from "../lib/payhip";
 
 
 
 export default function Shop() {
-  const { toggleWishlist, isWishlisted, wishlistCount } = useStorefront();
+  const { toggleWishlist, isWishlisted } = useStorefront();
   const [filter, setFilter] = useState("All");
   const [items, setItems] = useState<CatalogItem[]>(fallbackCatalog);
   const [status, setStatus] = useState<"idle" | "loading" | "error" | "ready">(
@@ -155,27 +153,6 @@ export default function Shop() {
             {status === "error" && (
               <p className="muted">Showing the cached catalog.</p>
             )}
-          </div>
-          <div className="card storefront-tools">
-            <h3>Storefront Tools</h3>
-            <p className="muted">
-              Wishlist items: {wishlistCount}. Payhip handles checkout and
-              payment.
-            </p>
-            <div className="button-row">
-              <Link className="button ghost" to="/account">
-                Open Account
-              </Link>
-              <a
-                className="button ghost"
-                href={PAYHIP_STORE_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open Payhip
-              </a>
-            </div>
-            <CurrencyConverter />
           </div>
           <div className="filter-row">
             {categories.map((category) => (
