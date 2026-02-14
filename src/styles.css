@@ -173,7 +173,7 @@ main {
 .nav-links {
   display: flex;
   gap: clamp(14px, 1.2vw, 22px);
-  font-size: 0.95rem;
+  font-size: 1.12rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   justify-self: center;
@@ -199,7 +199,7 @@ main {
   background: transparent;
   padding: 8px 12px;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 0.93rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
@@ -216,7 +216,7 @@ main {
   padding: 9px 15px;
   border-radius: 999px;
   border: 1px solid rgba(11, 11, 12, 0.2);
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -283,7 +283,7 @@ main {
   background: transparent;
   padding: 9px 15px;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
@@ -743,13 +743,17 @@ label {
 
 @media (max-width: 1360px) {
   .nav-links {
-    font-size: 0.9rem;
+    font-size: 1.02rem;
     letter-spacing: 0.06em;
     gap: 14px;
   }
 
   .account-link,
-  .theme-toggle,
+  .theme-toggle {
+    font-size: 0.82rem;
+    padding: 8px 12px;
+  }
+
   .currency-select {
     font-size: 0.74rem;
     padding: 8px 12px;
