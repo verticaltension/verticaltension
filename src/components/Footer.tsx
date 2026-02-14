@@ -64,19 +64,19 @@ export default function Footer() {
         <div>
           <strong>Legal</strong>
           <p>
-            <Link to="/impressum">Impressum / Legal Notice</Link>
+            <Link to="/impressum">Legal Notice / Impressum</Link>
           </p>
           <p>
-            <Link to="/privacy">Datenschutz / Privacy Policy</Link>
+            <Link to="/privacy">Privacy Policy / Datenschutz</Link>
           </p>
           <p>
-            <Link to="/terms">AGB / Terms &amp; Conditions</Link>
+            <Link to="/terms">Terms &amp; Conditions / AGB</Link>
           </p>
           <p>
-            <Link to="/withdrawal">Widerruf / Right of Withdrawal</Link>
+            <Link to="/withdrawal">Right of Withdrawal / Widerruf</Link>
           </p>
           <p>
-            <Link to="/shipping-payment">Versand &amp; Zahlung / Shipping &amp; Payment</Link>
+            <Link to="/shipping-payment">Shipping &amp; Payment / Versand &amp; Zahlung</Link>
           </p>
         </div>
       </div>

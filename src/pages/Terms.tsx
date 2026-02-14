@@ -4,21 +4,42 @@ export default function Terms() {
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <span className="badge">AGB</span>
-            <h1>Allgemeine Geschäftsbedingungen</h1>
+            <span className="badge">Terms</span>
+            <h1>Terms &amp; Conditions / Allgemeine Geschäftsbedingungen</h1>
             <p>
-              Diese Seite ist als Platzhalter für die AGB vorgesehen. Bitte
-              ergänzen Sie die finalen Vertragsbedingungen passend zu Ihrem
-              Angebot (B2B/B2C, digitale Inhalte, physische Produkte, Services).
+              This page is a placeholder for your final terms and conditions.
+              Add contract terms tailored to your offer (B2B/B2C, digital
+              content, physical products, services). A German version follows
+              below.
             </p>
           </div>
           <div className="hero-panel">
-            <h2>Relevante Rechtsgrundlagen</h2>
+            <h2>Relevant Legal Bases / Relevante Rechtsgrundlagen</h2>
             <ul>
               <li>§§ 305 ff. BGB (AGB-Recht)</li>
               <li>§§ 312j ff. BGB (Fernabsatz)</li>
               <li>PAngV (Preisangaben)</li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <h2>Terms &amp; Conditions (English)</h2>
+            <p>Placeholder for your English terms and conditions.</p>
+          </div>
+          <div className="card">
+            <p>
+              Terms must be tailored to your offer (B2B/B2C, digital content,
+              physical goods, services). For consumer distance contracts, provide
+              clear pre-contract information and a withdrawal policy.
+            </p>
+            <p className="section-note">
+              Note: This is not legal advice. Please obtain a proper review of
+              your final terms.
+            </p>
           </div>
         </div>
       </section>
@@ -39,26 +60,6 @@ export default function Terms() {
             <p className="section-note">
               Hinweis: Dies ist keine Rechtsberatung. Lassen Sie AGB individuell
               prüfen (z. B. durch Fachanwälte oder spezialisierte Anbieter).
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <h2>Terms &amp; Conditions (English)</h2>
-            <p>Placeholder for your English terms and conditions.</p>
-          </div>
-          <div className="card">
-            <p>
-              Terms must be tailored to your offer (B2B/B2C, digital content,
-              physical goods, services). For consumer distance contracts, provide
-              clear pre-contract information and a withdrawal policy.
-            </p>
-            <p className="section-note">
-              Note: This is not legal advice. Please obtain a proper review of
-              your final terms.
             </p>
           </div>
         </div>
