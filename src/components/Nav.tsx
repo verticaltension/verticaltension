@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useStorefront } from "../context/StorefrontContext";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { wishlistCount } = useStorefront();
 
   useEffect(() => {
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
@@ -57,6 +59,9 @@ export default function Nav() {
           </NavLink>
           <NavLink to="/shop" onClick={() => setOpen(false)}>
             Shop
+          </NavLink>
+          <NavLink to="/account" onClick={() => setOpen(false)}>
+            Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
           </NavLink>
           <NavLink to="/alien-echoes" onClick={() => setOpen(false)}>
             Alien Echoes

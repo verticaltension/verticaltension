@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import CurrencyConverter from "../components/CurrencyConverter";
+import { useStorefront } from "../context/StorefrontContext";
 import { catalog as fallbackCatalog, CatalogItem } from "../data/catalog";
 import { completedArc, remainingTitles } from "../data/shopTitles";
 import { apiUrl } from "../lib/api";
-import { getPayhipHref } from "../lib/payhip";
+import { getPayhipHref, PAYHIP_STORE_URL } from "../lib/payhip";
 
 
 
 export default function Shop() {
+  const { toggleWishlist, isWishlisted, wishlistCount } = useStorefront();
   const [filter, setFilter] = useState("All");
   const [items, setItems] = useState<CatalogItem[]>(fallbackCatalog);
   const [status, setStatus] = useState<"idle" | "loading" | "error" | "ready">(
@@ -152,6 +156,27 @@ export default function Shop() {
               <p className="muted">Showing the cached catalog.</p>
             )}
           </div>
+          <div className="card storefront-tools">
+            <h3>Storefront Tools</h3>
+            <p className="muted">
+              Wishlist items: {wishlistCount}. Payhip handles checkout and
+              payment.
+            </p>
+            <div className="button-row">
+              <Link className="button ghost" to="/account">
+                Open Account
+              </Link>
+              <a
+                className="button ghost"
+                href={PAYHIP_STORE_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open Payhip
+              </a>
+            </div>
+            <CurrencyConverter />
+          </div>
           <div className="filter-row">
             {categories.map((category) => (
               <button
@@ -165,30 +190,50 @@ export default function Shop() {
             ))}
           </div>
           <div className="card-grid">
-            {visible.map((item) => (
-              <article className="card" key={item.id}>
-                <h3>{item.title}</h3>
-                <p className="muted">{item.description}</p>
-                <div className="meta">
-                  <span>{item.status}</span>
-                  <span>{item.format}</span>
-                </div>
-                <div className="button-row">
-                  <a
-                    className={`button ghost ${item.payhipProductKey ? "payhip-buy-button" : ""}`}
-                    href={getPayhipHref(item.payhipProductKey)}
-                    {...(item.payhipProductKey
-                      ? {
-                          "data-product": item.payhipProductKey,
-                          "data-theme": "none",
-                        }
-                      : {})}
-                  >
-                    Add to Cart
-                  </a>
-                </div>
-              </article>
-            ))}
+            {visible.map((item) => {
+              const wished = isWishlisted(item.id);
+
+              return (
+                <article className="card" key={item.id}>
+                  <h3>{item.title}</h3>
+                  <p className="muted">{item.description}</p>
+                  <div className="meta">
+                    <span>{item.status}</span>
+                    <span>{item.format}</span>
+                  </div>
+                  <div className="button-row">
+                    <button
+                      className={`button ${wished ? "primary" : "ghost"}`}
+                      type="button"
+                      onClick={() =>
+                        toggleWishlist({
+                          id: item.id,
+                          title: item.title,
+                          category: item.category,
+                          status: item.status,
+                          format: item.format,
+                          payhipProductKey: item.payhipProductKey,
+                        })
+                      }
+                    >
+                      {wished ? "Remove Wishlist" : "Add Wishlist"}
+                    </button>
+                    <a
+                      className={`button ghost ${item.payhipProductKey ? "payhip-buy-button" : ""}`}
+                      href={getPayhipHref(item.payhipProductKey)}
+                      {...(item.payhipProductKey
+                        ? {
+                            "data-product": item.payhipProductKey,
+                            "data-theme": "none",
+                          }
+                        : {})}
+                    >
+                      Add to Cart
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
