@@ -52,7 +52,7 @@
   --border: rgba(11, 11, 12, 0.08);
   --input-bg: #fff;
   --radius: 18px;
-  --max: 1280px;
+  --max: 1480px;
   --serif: "Minion Pro";
   --sans: "Minion Pro";
   color-scheme: light;
@@ -146,7 +146,8 @@ main {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  padding: 18px 0;
+  padding: 20px 0;
+  column-gap: 22px;
 }
 
 .brand {
@@ -155,29 +156,36 @@ main {
   gap: 12px;
   font-family: var(--serif);
   letter-spacing: 0.5px;
-  font-size: 1.4rem;
+  font-size: 1.68rem;
+}
+
+.brand span {
+  white-space: nowrap;
 }
 
 .brand img {
-  width: 78px;
-  height: 78px;
+  width: 94px;
+  height: 94px;
   object-fit: contain;
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.2));
 }
 
 .nav-links {
   display: flex;
-  gap: 18px;
+  gap: clamp(14px, 1.2vw, 22px);
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   justify-self: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 .nav-links a {
   padding-bottom: 6px;
   border-bottom: 2px solid transparent;
   transition: border-color 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-links a.active,
@@ -200,12 +208,12 @@ main {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   justify-self: end;
 }
 
 .account-link {
-  padding: 8px 14px;
+  padding: 9px 15px;
   border-radius: 999px;
   border: 1px solid rgba(11, 11, 12, 0.2);
   font-size: 0.78rem;
@@ -245,7 +253,7 @@ main {
   border: 1px solid rgba(11, 11, 12, 0.2);
   background: #ffffff;
   border-radius: 999px;
-  padding: 8px 12px;
+  padding: 9px 13px;
   font-size: 0.78rem;
   letter-spacing: 0.02em;
   color: #111111;
@@ -273,7 +281,7 @@ main {
 .theme-toggle {
   border: 1px solid rgba(11, 11, 12, 0.2);
   background: transparent;
-  padding: 8px 14px;
+  padding: 9px 15px;
   border-radius: 999px;
   font-size: 0.78rem;
   letter-spacing: 0.1em;
@@ -733,6 +741,21 @@ label {
   line-height: 1.5;
 }
 
+@media (max-width: 1360px) {
+  .nav-links {
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    gap: 14px;
+  }
+
+  .account-link,
+  .theme-toggle,
+  .currency-select {
+    font-size: 0.74rem;
+    padding: 8px 12px;
+  }
+}
+
 @media (max-width: 860px) {
   .nav-links {
     position: absolute;
@@ -773,6 +796,10 @@ label {
     flex-direction: column;
     align-items: flex-end;
     gap: 6px;
+  }
+
+  .brand span {
+    white-space: normal;
   }
 
   .account-link {

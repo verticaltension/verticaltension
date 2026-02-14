@@ -105,12 +105,12 @@ export default function Nav() {
           </div>
         </nav>
         <div className="nav-actions">
-          <a className="account-link cart-link" href={PAYHIP_CART_URL}>
-            Cart
-          </a>
           <NavLink className="account-link" to="/account">
             Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
           </NavLink>
+          <a className="account-link cart-link" href={PAYHIP_CART_URL}>
+            Cart
+          </a>
           <select
             className="currency-select currency-desktop"
             value={account.preferredCurrency}
