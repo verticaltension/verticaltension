@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import { apiUrl } from "../lib/api";
 
 const initialForm = {
   name: "",
@@ -23,11 +24,15 @@ export default function Contact() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setStatus("sending");
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 10000);
+
     try {
-      const response = await fetch("https://api.verticaltension.com/api/contact", {
+      const response = await fetch(apiUrl("/api/contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
+        signal: controller.signal,
       });
       if (!response.ok) {
         throw new Error("Contact request failed");
@@ -36,6 +41,8 @@ export default function Contact() {
       setForm(initialForm);
     } catch (error) {
       setStatus("error");
+    } finally {
+      window.clearTimeout(timeoutId);
     }
   };
   return (

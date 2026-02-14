@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { getPayhipHref } from "../lib/payhip";
 
 export default function AlienEchoes() {
@@ -65,10 +64,13 @@ export default function AlienEchoes() {
           </div>
           <div className="feature-split">
             <div className="cover-card">
-              <img
-                src="/alien-echoes-cover.png"
-                alt="Alien Echoes book cover"
-              />
+              <picture>
+                <source srcSet="/alien-echoes-cover.webp" type="image/webp" />
+                <img
+                  src="/alien-echoes-cover.png"
+                  alt="Alien Echoes book cover"
+                />
+              </picture>
               <div className="cover-meta">
                 <strong>Alien Echoes</strong>
                 <span>Draft 1 · PDF · 885 KB</span>

@@ -42,11 +42,26 @@ export const initDb = async () => {
 
   if (existsSync(seedPath)) {
     const seed = JSON.parse(readFileSync(seedPath, "utf-8"));
-    for (const item of seed) {
+    if (Array.isArray(seed) && seed.length > 0) {
+      const ids = seed.map((item) => item.id);
+      const titles = seed.map((item) => item.title);
+      const categories = seed.map((item) => item.category);
+      const statuses = seed.map((item) => item.status);
+      const descriptions = seed.map((item) => item.description);
+      const formats = seed.map((item) => item.format);
+
       await pool.query(
         `
         INSERT INTO catalog (id, title, category, status, description, format)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        SELECT *
+        FROM UNNEST(
+          $1::text[],
+          $2::text[],
+          $3::text[],
+          $4::text[],
+          $5::text[],
+          $6::text[]
+        ) AS rows(id, title, category, status, description, format)
         ON CONFLICT (id) DO UPDATE SET
           title = EXCLUDED.title,
           category = EXCLUDED.category,
@@ -54,14 +69,7 @@ export const initDb = async () => {
           description = EXCLUDED.description,
           format = EXCLUDED.format
       `,
-        [
-          item.id,
-          item.title,
-          item.category,
-          item.status,
-          item.description,
-          item.format,
-        ]
+        [ids, titles, categories, statuses, descriptions, formats]
       );
     }
   }

@@ -1,7 +1,6 @@
 @font-face {
   font-family: "Minion Pro";
-  src: url("/fonts/MinionPro-Regular.woff2") format("woff2"),
-       url("/fonts/MinionPro-Regular.woff") format("woff");
+  src: url("/fonts/MinionPro-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -9,8 +8,7 @@
 
 @font-face {
   font-family: "Minion Pro";
-  src: url("/fonts/MinionPro-Italic.woff2") format("woff2"),
-       url("/fonts/MinionPro-Italic.woff") format("woff");
+  src: url("/fonts/MinionPro-Italic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -18,8 +16,7 @@
 
 @font-face {
   font-family: "Minion Pro";
-  src: url("/fonts/MinionPro-Semibold.woff2") format("woff2"),
-       url("/fonts/MinionPro-Semibold.woff") format("woff");
+  src: url("/fonts/MinionPro-Semibold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -27,8 +24,7 @@
 
 @font-face {
   font-family: "Minion Pro";
-  src: url("/fonts/MinionPro-Bold.woff2") format("woff2"),
-       url("/fonts/MinionPro-Bold.woff") format("woff");
+  src: url("/fonts/MinionPro-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -36,8 +32,7 @@
 
 @font-face {
   font-family: "Minion Pro";
-  src: url("/fonts/MinionPro-BoldItalic.woff2") format("woff2"),
-       url("/fonts/MinionPro-BoldItalic.woff") format("woff");
+  src: url("/fonts/MinionPro-BoldItalic.woff2") format("woff2");
   font-weight: 700;
   font-style: italic;
   font-display: swap;

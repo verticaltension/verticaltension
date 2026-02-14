@@ -18,7 +18,10 @@ export default function Home() {
             </a>
           </div>
           <div className="download-hero-art">
-            <img src="/alien-echoes-cover.png" alt="Alien Echoes book cover" />
+            <picture>
+              <source srcSet="/alien-echoes-cover.webp" type="image/webp" />
+              <img src="/alien-echoes-cover.png" alt="Alien Echoes book cover" />
+            </picture>
           </div>
         </div>
       </section>
