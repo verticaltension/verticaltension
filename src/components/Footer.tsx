@@ -51,6 +51,15 @@ export default function Footer() {
               Instagram
             </a>
           </p>
+          <p>
+            <a
+              href="https://www.reddit.com/user/verticaltensionpress/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Reddit
+            </a>
+          </p>
         </div>
         <div>
           <strong>Legal</strong>
