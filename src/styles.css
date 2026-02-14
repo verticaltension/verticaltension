@@ -202,6 +202,7 @@ main {
   font-size: 0.93rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -286,6 +287,7 @@ main {
   font-size: 0.86rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  white-space: nowrap;
   cursor: pointer;
   color: var(--ink);
 }
@@ -793,17 +795,34 @@ label {
 
   .nav-bar {
     position: relative;
-    grid-template-columns: auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 12px;
+    padding: 14px 0;
   }
 
   .nav-actions {
     flex-direction: column;
     align-items: flex-end;
-    gap: 6px;
+    gap: 8px;
+    padding-top: 4px;
+  }
+
+  .brand {
+    min-width: 0;
+    gap: 10px;
+    font-size: 1.38rem;
   }
 
   .brand span {
     white-space: normal;
+    line-height: 1.08;
+    max-width: 11ch;
+  }
+
+  .brand img {
+    width: 72px;
+    height: 72px;
   }
 
   .account-link {
@@ -840,6 +859,13 @@ label {
 
   .theme-toggle {
     order: -1;
+    min-width: 112px;
+    text-align: center;
+  }
+
+  .menu-toggle {
+    min-width: 112px;
+    justify-content: center;
   }
 }
 
