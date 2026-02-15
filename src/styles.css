@@ -173,7 +173,7 @@ main {
 .nav-links {
   display: flex;
   gap: clamp(14px, 1.2vw, 22px);
-  font-size: 1.12rem;
+  font-size: 1.04rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   justify-self: center;
@@ -745,7 +745,7 @@ label {
 
 @media (max-width: 1360px) {
   .nav-links {
-    font-size: 1.02rem;
+    font-size: 0.94rem;
     letter-spacing: 0.06em;
     gap: 14px;
   }
