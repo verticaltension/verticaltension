@@ -1,10 +1,10 @@
-import { type ChangeEvent } from "react";
+import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   CURRENCIES,
   type CurrencyCode,
   useStorefront,
 } from "../context/StorefrontContext";
-import { getPayhipHref } from "../lib/payhip";
 
 export default function Account() {
   const {
@@ -13,26 +13,72 @@ export default function Account() {
     wishlist,
     removeWishlistItem,
     wishlistCount,
+    addToCart,
+    isInCart,
+    isAuthenticated,
   } = useStorefront();
+
+  const [draft, setDraft] = useState({
+    name: account.name,
+    email: account.email,
+    preferredCurrency: account.preferredCurrency,
+  });
+  const [saveNotice, setSaveNotice] = useState("");
+
+  useEffect(() => {
+    setDraft({
+      name: account.name,
+      email: account.email,
+      preferredCurrency: account.preferredCurrency,
+    });
+  }, [account.name, account.email, account.preferredCurrency]);
 
   const handleProfileChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-    if (name === "preferredCurrency") {
-      updateAccount({ preferredCurrency: value as CurrencyCode });
-      return;
-    }
-
-    if (name === "name") {
-      updateAccount({ name: value });
-      return;
-    }
-
-    if (name === "email") {
-      updateAccount({ email: value });
-    }
+    setDraft((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
   };
+
+  const handleProfileSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    updateAccount({
+      name: draft.name.trim(),
+      email: draft.email.trim(),
+      preferredCurrency: draft.preferredCurrency as CurrencyCode,
+    });
+    setSaveNotice("Profile saved.");
+  };
+
+  const canSaveProfile = Boolean(draft.name.trim() && draft.email.trim());
+
+  if (!isAuthenticated) {
+    return (
+      <div className="page">
+        <section className="section">
+          <div className="container account-layout">
+            <div className="card">
+              <h2>Account Access</h2>
+              <p className="muted">
+                Login or register to manage profile data, wishlist, and cart.
+              </p>
+              <div className="form-actions">
+                <Link className="button ghost" to="/login">
+                  Login
+                </Link>
+                <Link className="button ghost" to="/register">
+                  Register
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="page">
@@ -61,16 +107,13 @@ export default function Account() {
         <div className="container account-layout">
           <div className="card">
             <h2>Profile</h2>
-            <p className="muted">
-              Profile preferences are stored on this device for quick access.
-            </p>
-            <form className="form">
+            <form className="form" onSubmit={handleProfileSubmit}>
               <label>
                 Name
                 <input
                   type="text"
                   name="name"
-                  value={account.name}
+                  value={draft.name}
                   onChange={handleProfileChange}
                   placeholder="Your name"
                 />
@@ -80,7 +123,7 @@ export default function Account() {
                 <input
                   type="email"
                   name="email"
-                  value={account.email}
+                  value={draft.email}
                   onChange={handleProfileChange}
                   placeholder="Your email"
                 />
@@ -89,7 +132,7 @@ export default function Account() {
                 Preferred currency
                 <select
                   name="preferredCurrency"
-                  value={account.preferredCurrency}
+                  value={draft.preferredCurrency}
                   onChange={handleProfileChange}
                 >
                   {CURRENCIES.map((currency) => (
@@ -100,6 +143,12 @@ export default function Account() {
                   ))}
                 </select>
               </label>
+              <div className="form-actions">
+                <button className="button ghost" type="submit" disabled={!canSaveProfile}>
+                  Save Profile
+                </button>
+                {saveNotice && <span className="muted">{saveNotice}</span>}
+              </div>
             </form>
           </div>
         </div>
@@ -109,10 +158,6 @@ export default function Account() {
         <div className="container">
           <div className="section-head">
             <h2>Wishlist</h2>
-            <p>
-              Saved titles are local to this browser. Use Add to Cart to proceed
-              with Payhip checkout.
-            </p>
           </div>
           {wishlist.length === 0 ? (
             <div className="card">
@@ -130,19 +175,23 @@ export default function Account() {
                     <span>{item.status}</span>
                     <span>{item.format}</span>
                   </div>
-                  <div className="button-row">
-                    <a
-                      className={`button ghost ${item.payhipProductKey ? "payhip-buy-button" : ""}`}
-                      href={getPayhipHref(item.payhipProductKey)}
-                      {...(item.payhipProductKey
-                        ? {
-                            "data-product": item.payhipProductKey,
-                            "data-theme": "none",
-                          }
-                        : {})}
+                  <div className="button-row catalog-actions">
+                    <button
+                      className={`button ${isInCart(item.id) ? "primary" : "ghost"}`}
+                      type="button"
+                      onClick={() =>
+                        addToCart({
+                          id: item.id,
+                          title: item.title,
+                          category: item.category,
+                          status: item.status,
+                          format: item.format,
+                          payhipProductKey: item.payhipProductKey,
+                        })
+                      }
                     >
-                      Add to Cart
-                    </a>
+                      {isInCart(item.id) ? "In Cart" : "Add to Cart"}
+                    </button>
                     <button
                       className="button ghost"
                       type="button"

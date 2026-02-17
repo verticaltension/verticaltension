@@ -6,7 +6,10 @@ import Footer from "./components/Footer";
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const Shop = lazy(() => import("./pages/Shop"));
+const Cart = lazy(() => import("./pages/Cart"));
 const Account = lazy(() => import("./pages/Account"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 const Contact = lazy(() => import("./pages/Contact"));
 const AlienEchoes = lazy(() => import("./pages/AlienEchoes"));
 const Impressum = lazy(() => import("./pages/Impressum"));
@@ -33,6 +36,9 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/account" element={<Account />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/alien-echoes" element={<AlienEchoes />} />

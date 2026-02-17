@@ -3,12 +3,11 @@ import { useStorefront } from "../context/StorefrontContext";
 import { catalog as fallbackCatalog, CatalogItem } from "../data/catalog";
 import { completedArc, remainingTitles } from "../data/shopTitles";
 import { apiUrl } from "../lib/api";
-import { getPayhipHref } from "../lib/payhip";
 
 
 
 export default function Shop() {
-  const { toggleWishlist, isWishlisted } = useStorefront();
+  const { toggleWishlist, isWishlisted, addToCart, isInCart } = useStorefront();
   const [filter, setFilter] = useState("All");
   const [items, setItems] = useState<CatalogItem[]>(fallbackCatalog);
   const [status, setStatus] = useState<"idle" | "loading" | "error" | "ready">(
@@ -169,6 +168,7 @@ export default function Shop() {
           <div className="card-grid">
             {visible.map((item) => {
               const wished = isWishlisted(item.id);
+              const inCart = isInCart(item.id);
 
               return (
                 <article className="card" key={item.id}>
@@ -178,7 +178,7 @@ export default function Shop() {
                     <span>{item.status}</span>
                     <span>{item.format}</span>
                   </div>
-                  <div className="button-row">
+                  <div className="button-row catalog-actions">
                     <button
                       className={`button ${wished ? "primary" : "ghost"}`}
                       type="button"
@@ -195,18 +195,22 @@ export default function Shop() {
                     >
                       {wished ? "Remove Wishlist" : "Add Wishlist"}
                     </button>
-                    <a
-                      className={`button ghost ${item.payhipProductKey ? "payhip-buy-button" : ""}`}
-                      href={getPayhipHref(item.payhipProductKey)}
-                      {...(item.payhipProductKey
-                        ? {
-                            "data-product": item.payhipProductKey,
-                            "data-theme": "none",
-                          }
-                        : {})}
+                    <button
+                      className={`button ${inCart ? "primary" : "ghost"}`}
+                      type="button"
+                      onClick={() =>
+                        addToCart({
+                          id: item.id,
+                          title: item.title,
+                          category: item.category,
+                          status: item.status,
+                          format: item.format,
+                          payhipProductKey: item.payhipProductKey,
+                        })
+                      }
                     >
-                      Add to Cart
-                    </a>
+                      {inCart ? "In Cart" : "Add to Cart"}
+                    </button>
                   </div>
                 </article>
               );

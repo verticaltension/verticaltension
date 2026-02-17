@@ -14,7 +14,22 @@ type AccountProfile = {
   preferredCurrency: CurrencyCode;
 };
 
+type StoredAuthUser = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 export type WishlistItem = {
+  id: string;
+  title: string;
+  category: string;
+  status: string;
+  format: string;
+  payhipProductKey?: string;
+};
+
+export type CartItem = {
   id: string;
   title: string;
   category: string;
@@ -81,11 +96,28 @@ type RateStatus = "idle" | "loading" | "ready" | "error";
 type StorefrontContextValue = {
   account: AccountProfile;
   updateAccount: (updates: Partial<AccountProfile>) => void;
+  isAuthenticated: boolean;
+  registerUser: (payload: {
+    name: string;
+    email: string;
+    password: string;
+  }) => { ok: true } | { ok: false; error: string };
+  loginUser: (payload: {
+    email: string;
+    password: string;
+  }) => { ok: true } | { ok: false; error: string };
+  logoutUser: () => void;
   wishlist: WishlistItem[];
   wishlistCount: number;
   isWishlisted: (id: string) => boolean;
   toggleWishlist: (item: WishlistItem) => void;
   removeWishlistItem: (id: string) => void;
+  cart: CartItem[];
+  cartCount: number;
+  isInCart: (id: string) => boolean;
+  addToCart: (item: CartItem) => void;
+  removeCartItem: (id: string) => void;
+  clearCart: () => void;
   ratesStatus: RateStatus;
   convertCurrency: (
     amount: number,
@@ -95,7 +127,10 @@ type StorefrontContextValue = {
 };
 
 const ACCOUNT_STORAGE_KEY = "vtp-account-profile";
+const AUTH_USER_STORAGE_KEY = "vtp-auth-user";
+const AUTH_SESSION_STORAGE_KEY = "vtp-auth-session";
 const WISHLIST_STORAGE_KEY = "vtp-wishlist";
+const CART_STORAGE_KEY = "vtp-cart";
 
 const DEFAULT_ACCOUNT: AccountProfile = {
   name: "",
@@ -131,7 +166,62 @@ const parseStoredJson = <T,>(value: string | null): T | null => {
   }
 };
 
+const validatePasswordStrength = (password: string): string | null => {
+  if (password.length < 10) {
+    return "Password must be at least 10 characters.";
+  }
+
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasDigit = /\d/.test(password);
+  const hasSymbol = /[^A-Za-z0-9]/.test(password);
+
+  if (!hasUpper || !hasLower || !hasDigit || !hasSymbol) {
+    return "Password must include uppercase, lowercase, number, and symbol.";
+  }
+
+  return null;
+};
+
 export function StorefrontProvider({ children }: { children: ReactNode }) {
+  const [authUser, setAuthUser] = useState<StoredAuthUser | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const parsed = parseStoredJson<StoredAuthUser>(
+      localStorage.getItem(AUTH_USER_STORAGE_KEY)
+    );
+
+    if (
+      parsed &&
+      typeof parsed.email === "string" &&
+      typeof parsed.password === "string" &&
+      typeof parsed.name === "string"
+    ) {
+      return parsed;
+    }
+
+    return null;
+  });
+
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    const sessionEmail = localStorage.getItem(AUTH_SESSION_STORAGE_KEY);
+    const parsedUser = parseStoredJson<StoredAuthUser>(
+      localStorage.getItem(AUTH_USER_STORAGE_KEY)
+    );
+
+    return Boolean(
+      sessionEmail &&
+        parsedUser &&
+        parsedUser.email.toLowerCase() === sessionEmail.toLowerCase()
+    );
+  });
+
   const [account, setAccount] = useState<AccountProfile>(() => {
     if (typeof window === "undefined") {
       return DEFAULT_ACCOUNT;
@@ -173,6 +263,20 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     return parsed.filter((item) => typeof item?.id === "string");
   });
 
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    const parsed = parseStoredJson<CartItem[]>(localStorage.getItem(CART_STORAGE_KEY));
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.filter((item) => typeof item?.id === "string");
+  });
+
   const [ratesStatus, setRatesStatus] = useState<RateStatus>("idle");
   const [rates, setRates] = useState<Record<CurrencyCode, number>>(DEFAULT_RATES);
 
@@ -181,8 +285,30 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   }, [account]);
 
   useEffect(() => {
+    if (authUser) {
+      localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(authUser));
+      return;
+    }
+
+    localStorage.removeItem(AUTH_USER_STORAGE_KEY);
+  }, [authUser]);
+
+  useEffect(() => {
+    if (isAuthenticated && authUser) {
+      localStorage.setItem(AUTH_SESSION_STORAGE_KEY, authUser.email);
+      return;
+    }
+
+    localStorage.removeItem(AUTH_SESSION_STORAGE_KEY);
+  }, [isAuthenticated, authUser]);
+
+  useEffect(() => {
     localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
   }, [wishlist]);
+
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -251,6 +377,73 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const registerUser = useCallback(
+    (payload: { name: string; email: string; password: string }) => {
+      const name = payload.name.trim();
+      const email = payload.email.trim().toLowerCase();
+      const password = payload.password;
+
+      if (!name || !email || !password) {
+        return { ok: false as const, error: "All fields are required." };
+      }
+
+      const passwordError = validatePasswordStrength(password);
+      if (passwordError) {
+        return {
+          ok: false as const,
+          error: passwordError,
+        };
+      }
+
+      if (authUser && authUser.email.toLowerCase() === email) {
+        return {
+          ok: false as const,
+          error: "An account with this email already exists.",
+        };
+      }
+
+      const nextUser: StoredAuthUser = { name, email, password };
+      setAuthUser(nextUser);
+      setIsAuthenticated(true);
+      setAccount((previous) => ({
+        ...previous,
+        name,
+        email,
+      }));
+
+      return { ok: true as const };
+    },
+    [authUser]
+  );
+
+  const loginUser = useCallback(
+    (payload: { email: string; password: string }) => {
+      const email = payload.email.trim().toLowerCase();
+      const password = payload.password;
+
+      if (!authUser) {
+        return { ok: false as const, error: "No registered account found." };
+      }
+
+      if (authUser.email.toLowerCase() !== email || authUser.password !== password) {
+        return { ok: false as const, error: "Invalid email or password." };
+      }
+
+      setIsAuthenticated(true);
+      setAccount((previous) => ({
+        ...previous,
+        name: authUser.name,
+        email: authUser.email,
+      }));
+      return { ok: true as const };
+    },
+    [authUser]
+  );
+
+  const logoutUser = useCallback(() => {
+    setIsAuthenticated(false);
+  }, []);
+
   const isWishlisted = useCallback(
     (id: string) => wishlist.some((item) => item.id === id),
     [wishlist]
@@ -268,6 +461,29 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
 
   const removeWishlistItem = useCallback((id: string) => {
     setWishlist((previous) => previous.filter((entry) => entry.id !== id));
+  }, []);
+
+  const isInCart = useCallback(
+    (id: string) => cart.some((item) => item.id === id),
+    [cart]
+  );
+
+  const addToCart = useCallback((item: CartItem) => {
+    setCart((previous) => {
+      if (previous.some((entry) => entry.id === item.id)) {
+        return previous;
+      }
+
+      return [item, ...previous];
+    });
+  }, []);
+
+  const removeCartItem = useCallback((id: string) => {
+    setCart((previous) => previous.filter((entry) => entry.id !== id));
+  }, []);
+
+  const clearCart = useCallback(() => {
+    setCart([]);
   }, []);
 
   const convertCurrency = useCallback(
@@ -292,21 +508,40 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     () => ({
       account,
       updateAccount,
+      isAuthenticated,
+      registerUser,
+      loginUser,
+      logoutUser,
       wishlist,
       wishlistCount: wishlist.length,
       isWishlisted,
       toggleWishlist,
       removeWishlistItem,
+      cart,
+      cartCount: cart.length,
+      isInCart,
+      addToCart,
+      removeCartItem,
+      clearCart,
       ratesStatus,
       convertCurrency,
     }),
     [
       account,
       updateAccount,
+      isAuthenticated,
+      registerUser,
+      loginUser,
+      logoutUser,
       wishlist,
       isWishlisted,
       toggleWishlist,
       removeWishlistItem,
+      cart,
+      isInCart,
+      addToCart,
+      removeCartItem,
+      clearCart,
       ratesStatus,
       convertCurrency,
     ]

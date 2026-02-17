@@ -5,12 +5,18 @@ import {
   type CurrencyCode,
   useStorefront,
 } from "../context/StorefrontContext";
-import { PAYHIP_CART_URL } from "../lib/payhip";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const { wishlistCount, account, updateAccount } = useStorefront();
+  const {
+    wishlistCount,
+    cartCount,
+    account,
+    updateAccount,
+    isAuthenticated,
+    logoutUser,
+  } = useStorefront();
 
   useEffect(() => {
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
@@ -75,16 +81,35 @@ export default function Nav() {
           <NavLink to="/contact" onClick={() => setOpen(false)}>
             Contact
           </NavLink>
-          <NavLink
-            className="account-mobile-link"
-            to="/account"
-            onClick={() => setOpen(false)}
-          >
-            Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
+          {isAuthenticated ? (
+            <NavLink
+              className="account-mobile-link"
+              to="/account"
+              onClick={() => setOpen(false)}
+            >
+              Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
+            </NavLink>
+          ) : (
+            <>
+              <NavLink
+                className="account-mobile-link"
+                to="/login"
+                onClick={() => setOpen(false)}
+              >
+                Login
+              </NavLink>
+              <NavLink
+                className="account-mobile-link"
+                to="/register"
+                onClick={() => setOpen(false)}
+              >
+                Register
+              </NavLink>
+            </>
+          )}
+          <NavLink className="cart-mobile-link" to="/cart" onClick={() => setOpen(false)}>
+            Cart{cartCount > 0 ? ` (${cartCount})` : ""}
           </NavLink>
-          <a className="cart-mobile-link" href={PAYHIP_CART_URL}>
-            Cart
-          </a>
           <div className="currency-mobile-wrap">
             <label className="currency-mobile-label" htmlFor="currency-mobile">
               Currency
@@ -105,12 +130,38 @@ export default function Nav() {
           </div>
         </nav>
         <div className="nav-actions">
-          <NavLink className="account-link" to="/account">
-            Account{wishlistCount > 0 ? ` (${wishlistCount})` : ""}
+          {isAuthenticated ? (
+            <NavLink className="account-link account-link-main" to="/account">
+              <span>Account</span>
+              {wishlistCount > 0 && (
+                <span className="account-count" aria-label={`${wishlistCount} items in wishlist`}>
+                  {wishlistCount}
+                </span>
+              )}
+            </NavLink>
+          ) : (
+            <>
+              <NavLink className="account-link auth-link-main" to="/login">
+                Login
+              </NavLink>
+              <NavLink className="account-link auth-link-main" to="/register">
+                Register
+              </NavLink>
+            </>
+          )}
+          <NavLink className="account-link cart-link cart-link-main" to="/cart">
+            <span>Cart</span>
+            {cartCount > 0 && (
+              <span className="account-count" aria-label={`${cartCount} items in cart`}>
+                {cartCount}
+              </span>
+            )}
           </NavLink>
-          <a className="account-link cart-link" href={PAYHIP_CART_URL}>
-            Cart
-          </a>
+          {isAuthenticated && (
+            <button className="account-link nav-auth-button" type="button" onClick={logoutUser}>
+              Logout
+            </button>
+          )}
           <select
             className="currency-select currency-desktop"
             value={account.preferredCurrency}
@@ -129,8 +180,9 @@ export default function Nav() {
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
+            title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
           >
-            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+            {theme === "dark" ? "☀" : "☾"}
           </button>
           <button
             className="menu-toggle"

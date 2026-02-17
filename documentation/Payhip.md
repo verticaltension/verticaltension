@@ -2,9 +2,10 @@
 
 ## Current Setup
 - Payhip script is loaded in `index.html`.
-- "Add to Cart" buttons are rendered on:
+- "Add to Cart" actions are rendered on:
   - **Shop** page (each catalog card)
   - **Alien Echoes** page (next to the PDF button)
+  - **Account** page (wishlist items)
 - Store fallback URL: `https://payhip.com/verticaltensionpress`
 
 ## Files
@@ -52,6 +53,12 @@ If no key is present, it links to the store homepage.
 - A dedicated cart link can be used via:
   - `https://payhip.com/verticaltensionpress/cart`
 - This is now the preferred "View Cart" destination.
+
+## Intermediate Cart (On-Site)
+- Add-to-cart no longer redirects directly to Payhip.
+- Products are first staged in the local site cart (`/cart`).
+- Final checkout is user-initiated from the local cart and then forwarded to Payhip.
+- Cart and wishlist are browser-local state for storefront UX continuity.
 
 ## Remaining Full Integration Items
 To complete full Payhip product-level integration across the store, provide:

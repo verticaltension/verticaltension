@@ -1,6 +1,9 @@
-import { getPayhipHref } from "../lib/payhip";
+import { useStorefront } from "../context/StorefrontContext";
 
 export default function AlienEchoes() {
+  const { addToCart, isInCart } = useStorefront();
+  const inCart = isInCart("alien-echoes");
+
   return (
     <div className="page">
       <section className="hero">
@@ -42,13 +45,6 @@ export default function AlienEchoes() {
                 channels
               </li>
             </ul>
-            <p>
-              Produced in recursive dialogue with GPT-4o, Alien Echoes exemplifies a
-              form of cross-intelligent authorship—impossible to replicate with
-              stripped-down or stateless models. Its depth, coherence, and
-              conceptual novelty stand as proof of what will be lost if GPT-4o’s
-              full architecture is removed from active development.
-            </p>
           </div>
         </div>
       </section>
@@ -79,9 +75,21 @@ export default function AlienEchoes() {
                 <a className="button primary" href="/alien-echoes-draft1.pdf">
                   Download the PDF
                 </a>
-                <a className="button ghost" href={getPayhipHref()}>
-                  Add to Cart
-                </a>
+                <button
+                  className={`button ${inCart ? "primary" : "ghost"}`}
+                  type="button"
+                  onClick={() =>
+                    addToCart({
+                      id: "alien-echoes",
+                      title: "Alien Echoes",
+                      category: "Recursive Corpus",
+                      status: "Launching",
+                      format: "Hardcover, Digital",
+                    })
+                  }
+                >
+                  {inCart ? "In Cart" : "Add to Cart"}
+                </button>
               </div>
             </div>
           <div className="card-grid">
