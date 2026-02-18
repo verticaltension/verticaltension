@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 import { useConsent } from "../context/ConsentContext";
 
 export default function ConsentBanner() {
-  const { bannerOpen, hasDecision, acceptEssential, closeConsentSettings } =
-    useConsent();
+  const {
+    bannerOpen,
+    hasDecision,
+    acceptEssential,
+    declineNonEssential,
+    closeConsentSettings,
+  } = useConsent();
 
   if (!bannerOpen) {
     return null;
@@ -19,9 +24,6 @@ export default function ConsentBanner() {
             account preferences, cart, wishlist, theme, and currency settings.
           </p>
           <p>
-            No advertising pixel or analytics tracker is active on this site.
-          </p>
-          <p>
             This notice is configured to support GDPR and German TDDDG privacy
             requirements.
           </p>
@@ -34,6 +36,9 @@ export default function ConsentBanner() {
         <div className="button-row consent-actions">
           <button className="button primary" type="button" onClick={acceptEssential}>
             Accept Essential
+          </button>
+          <button className="button ghost" type="button" onClick={declineNonEssential}>
+            Decline Non-Essential
           </button>
           {hasDecision && (
             <button className="button ghost" type="button" onClick={closeConsentSettings}>

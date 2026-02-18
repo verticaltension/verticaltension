@@ -59,8 +59,7 @@ export default function Privacy() {
             <p>
               The site displays a privacy/cookie notice for essential browser
               storage used by storefront functions (cart, wishlist, theme,
-              currency) and essential authentication session cookies. No
-              advertising pixel is active.
+              currency) and essential authentication session cookies.
             </p>
 
             <h3>5. Checkout Provider (Payhip)</h3>
@@ -127,8 +126,7 @@ export default function Privacy() {
             <p>
               Die Website zeigt einen Datenschutz-/Cookie-Hinweis fuer
               essenzielle Browser-Speicherungen (Warenkorb, Wunschliste, Theme
-              und Waehrung) sowie essenzielle Authentifizierungs-Cookies. Es ist
-              kein Werbe-Pixel aktiv.
+              und Waehrung) sowie essenzielle Authentifizierungs-Cookies.
             </p>
 
             <h3>5. Checkout-Anbieter (Payhip)</h3>

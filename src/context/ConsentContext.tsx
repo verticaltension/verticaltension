@@ -9,13 +9,15 @@ import {
 
 type StoredConsent = {
   version: string;
-  acceptedAt: string;
+  decidedAt: string;
+  mode: "essential_only" | "decline_non_essential";
 };
 
 type ConsentContextValue = {
   hasDecision: boolean;
   bannerOpen: boolean;
   acceptEssential: () => void;
+  declineNonEssential: () => void;
   openConsentSettings: () => void;
   closeConsentSettings: () => void;
 };
@@ -29,12 +31,11 @@ const parseStoredConsent = (value: string | null): StoredConsent | null => {
   }
 
   try {
-    const parsed = JSON.parse(value) as Partial<StoredConsent>;
+    const parsed = JSON.parse(value) as Partial<StoredConsent> & {
+      acceptedAt?: string;
+    };
 
-    if (
-      typeof parsed.version !== "string" ||
-      typeof parsed.acceptedAt !== "string"
-    ) {
+    if (typeof parsed.version !== "string") {
       return null;
     }
 
@@ -42,7 +43,27 @@ const parseStoredConsent = (value: string | null): StoredConsent | null => {
       return null;
     }
 
-    return parsed as StoredConsent;
+    if (
+      parsed.mode === "essential_only" ||
+      parsed.mode === "decline_non_essential"
+    ) {
+      if (typeof parsed.decidedAt !== "string") {
+        return null;
+      }
+
+      return parsed as StoredConsent;
+    }
+
+    // Backward compatibility for older consent payload shape.
+    if (typeof parsed.acceptedAt === "string") {
+      return {
+        version: parsed.version,
+        decidedAt: parsed.acceptedAt,
+        mode: "essential_only",
+      };
+    }
+
+    return null;
   } catch {
     return null;
   }
@@ -80,7 +101,16 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
       acceptEssential: () => {
         setStoredConsent({
           version: CONSENT_VERSION,
-          acceptedAt: new Date().toISOString(),
+          decidedAt: new Date().toISOString(),
+          mode: "essential_only",
+        });
+        setBannerOpen(false);
+      },
+      declineNonEssential: () => {
+        setStoredConsent({
+          version: CONSENT_VERSION,
+          decidedAt: new Date().toISOString(),
+          mode: "decline_non_essential",
         });
         setBannerOpen(false);
       },
