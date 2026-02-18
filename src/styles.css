@@ -146,7 +146,7 @@ main {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  padding: 19px 0;
+  padding: 20px 0;
   column-gap: 22px;
 }
 
@@ -164,8 +164,8 @@ main {
 }
 
 .brand img {
-  width: 96px;
-  height: 96px;
+  width: 92px;
+  height: 92px;
   object-fit: contain;
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.2));
 }
@@ -225,21 +225,21 @@ main {
 }
 
 .account-link-main {
-  min-width: 156px;
+  min-width: 132px;
   display: inline-flex;
   justify-content: center;
   gap: 8px;
 }
 
 .cart-link-main {
-  min-width: 122px;
+  min-width: 114px;
   display: inline-flex;
   justify-content: center;
   gap: 8px;
 }
 
 .auth-link-main {
-  min-width: 108px;
+  min-width: 98px;
   display: inline-flex;
   justify-content: center;
 }
@@ -247,6 +247,14 @@ main {
 .nav-auth-button {
   background: transparent;
   font-family: inherit;
+}
+
+.account-link-main,
+.auth-link-main,
+.cart-link-main,
+.nav-auth-button {
+  font-size: calc(0.86rem - 1px);
+  padding: 8px 13px;
 }
 
 .account-count {
@@ -288,18 +296,25 @@ main {
 }
 
 .currency-desktop {
-  min-width: 165px;
+  min-width: 150px;
 }
 
 .currency-select {
   border: 1px solid rgba(11, 11, 12, 0.2);
   background: #ffffff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23111111' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 10px 6px;
   border-radius: 999px;
-  padding: 9px 13px;
+  padding: 8px 22px 8px 10px;
   font-size: 0.78rem;
   letter-spacing: 0.02em;
   color: #111111;
-  max-width: 230px;
+  max-width: 212px;
   cursor: pointer;
 }
 
@@ -323,14 +338,14 @@ main {
 .theme-toggle {
   border: 1px solid rgba(11, 11, 12, 0.2);
   background: transparent;
-  padding: 8px 11px;
+  padding: 8px 12px;
   border-radius: 999px;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   line-height: 1;
   letter-spacing: 0;
   text-transform: none;
   white-space: nowrap;
-  min-width: 44px;
+  min-width: 46px;
   justify-content: center;
   cursor: pointer;
   color: var(--ink);
@@ -350,8 +365,9 @@ main {
 }
 
 :root[data-theme="dark"] .currency-select {
-  background: #111114;
+  background-color: #111114;
   color: #f4f0e8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23f4f0e8' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
 }
 
 :root[data-theme="dark"] .currency-select option {
@@ -992,26 +1008,35 @@ label {
   }
 
   .account-link-main {
-    min-width: 146px;
+    min-width: 124px;
   }
 
   .cart-link-main {
-    min-width: 114px;
+    min-width: 106px;
   }
 
   .auth-link-main {
-    min-width: 102px;
+    min-width: 94px;
+  }
+
+  .account-link-main,
+  .auth-link-main,
+  .cart-link-main,
+  .nav-auth-button {
+    font-size: calc(0.8rem - 1px);
+    padding: 7px 11px;
   }
 
   .theme-toggle {
-    font-size: 1rem;
-    padding: 7px 10px;
-    min-width: 42px;
+    font-size: 0.92rem;
+    padding: 7px 11px;
+    min-width: 44px;
   }
 
   .currency-select {
     font-size: 0.74rem;
-    padding: 8px 12px;
+    padding: 8px 21px 8px 10px;
+    background-position: right 6px center;
   }
 }
 
@@ -1074,8 +1099,8 @@ label {
   }
 
   .brand img {
-    width: 74px;
-    height: 74px;
+    width: 72px;
+    height: 72px;
   }
 
   .account-link {
@@ -1112,8 +1137,8 @@ label {
 
   .theme-toggle {
     order: -1;
-    min-width: 44px;
-    padding: 8px 10px;
+    min-width: 40px;
+    padding: 7px 9px;
     text-align: center;
   }
 
