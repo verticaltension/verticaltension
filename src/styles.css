@@ -156,7 +156,7 @@ main {
   gap: 12px;
   font-family: var(--serif);
   letter-spacing: 0.5px;
-  font-size: 1.596rem;
+  font-size: 1.66rem;
 }
 
 .brand span {
@@ -1064,7 +1064,7 @@ label {
   .brand {
     min-width: 0;
     gap: 10px;
-    font-size: 1.311rem;
+    font-size: 1.364rem;
   }
 
   .brand span {
