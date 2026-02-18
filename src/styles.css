@@ -146,7 +146,7 @@ main {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  padding: 20px 0;
+  padding: 19px 0;
   column-gap: 22px;
 }
 
@@ -164,8 +164,8 @@ main {
 }
 
 .brand img {
-  width: 94px;
-  height: 94px;
+  width: 96px;
+  height: 96px;
   object-fit: contain;
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.2));
 }
@@ -1051,7 +1051,7 @@ label {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
     column-gap: 12px;
-    padding: 14px 0;
+    padding: 13px 0;
   }
 
   .nav-actions {
@@ -1074,8 +1074,8 @@ label {
   }
 
   .brand img {
-    width: 72px;
-    height: 72px;
+    width: 74px;
+    height: 74px;
   }
 
   .account-link {

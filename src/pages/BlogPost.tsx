@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router-dom";
 import { getBlogPostBySlug } from "../data/blogPosts";
-import { useStorefront } from "../context/StorefrontContext";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -10,7 +9,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
 export default function BlogPost() {
   const { slug } = useParams();
-  const { addToCart, isInCart } = useStorefront();
   const post = slug ? getBlogPostBySlug(slug) : undefined;
 
   if (!post) {
@@ -34,9 +32,6 @@ export default function BlogPost() {
       </div>
     );
   }
-
-  const cartItem = post.cartItem;
-  const inCart = cartItem ? isInCart(cartItem.id) : false;
 
   return (
     <div className="page">
@@ -88,45 +83,6 @@ export default function BlogPost() {
           </article>
         </div>
       </section>
-
-      {(post.draftHref || post.reviewCopyEmail || cartItem) && (
-        <section className="section">
-          <div className="container banner">
-            <div>
-              <span className="badge">Post Actions</span>
-              <h2>Read, Request, or Collect</h2>
-              <p>
-                Access the draft edition, request a review copy, or add this
-                volume to your on-site cart.
-              </p>
-            </div>
-            <div className="button-row">
-              {cartItem && (
-                <button
-                  className={`button ${inCart ? "primary" : "ghost"}`}
-                  type="button"
-                  onClick={() => addToCart(cartItem)}
-                >
-                  {inCart ? "In Cart" : "Add to Cart"}
-                </button>
-              )}
-              {post.draftHref && (
-                <a className="button primary" href={post.draftHref}>
-                  Read Draft PDF
-                </a>
-              )}
-              {post.reviewCopyEmail && (
-                <a
-                  className="button ghost"
-                  href={`mailto:${post.reviewCopyEmail}`}
-                >
-                  Request Review Copy
-                </a>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
     </div>
   );
 }
