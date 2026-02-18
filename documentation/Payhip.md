@@ -4,7 +4,7 @@
 - Payhip script is loaded in `index.html`.
 - "Add to Cart" actions are rendered on:
   - **Shop** page (each catalog card)
-  - **Alien Echoes** page (next to the PDF button)
+  - **Blog Post** pages (for post-linked titles)
   - **Account** page (wishlist items)
 - Store fallback URL: `https://payhip.com/verticaltensionpress`
 
@@ -12,7 +12,9 @@
 - `index.html` (Payhip script tag)
 - `src/lib/payhip.ts` (store URL + helper)
 - `src/pages/Shop.tsx` (Add to Cart buttons)
-- `src/pages/AlienEchoes.tsx` (Add to Cart button)
+- `src/pages/BlogPost.tsx` (Add to Cart button)
+- `src/pages/Cart.tsx` (checkout handoff to Payhip)
+- `src/pages/ThankYou.tsx` (post-purchase return page)
 - `src/data/catalog.ts` (optional `payhipProductKey`)
 
 ## How Add-to-Cart Works
@@ -59,6 +61,23 @@ If no key is present, it links to the store homepage.
 - Products are first staged in the local site cart (`/cart`).
 - Final checkout is user-initiated from the local cart and then forwarded to Payhip.
 - Cart and wishlist are browser-local state for storefront UX continuity.
+
+## Post-Purchase Thank-You Flow
+- The storefront now includes a dedicated success page at:
+  - `/thank-you`
+- On checkout click, the site marks a local checkout-pending flag.
+- When the buyer returns to `/thank-you`, the on-site cart is cleared.
+
+### Required Payhip setting
+To return customers to the site after payment, configure your Payhip checkout redirect URL to:
+
+`https://your-domain.example/thank-you`
+
+Replace `your-domain.example` with your live domain.
+
+### Production thank-you links
+- `https://verticaltension.com/thank-you`
+- `https://www.verticaltension.com/thank-you`
 
 ## Remaining Full Integration Items
 To complete full Payhip product-level integration across the store, provide:

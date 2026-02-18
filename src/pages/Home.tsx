@@ -382,8 +382,11 @@ export default function Home() {
               observable universe.
             </p>
           </div>
-          <Link className="button primary" to="/alien-echoes">
-            View the Landing Page
+          <Link
+            className="button primary"
+            to="/blog/alien-echoes-consolidated-overview"
+          >
+            Read Blog Post 01
           </Link>
         </div>
       </section>

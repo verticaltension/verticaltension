@@ -8,12 +8,16 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
 
-    const result = loginUser({ email, password });
+    setIsSubmitting(true);
+    const result = await loginUser({ email, password });
+    setIsSubmitting(false);
+
     if (!result.ok) {
       setError(result.error);
       return;
@@ -58,8 +62,8 @@ export default function Login() {
                 />
               </label>
               <div className="form-actions">
-                <button className="button ghost" type="submit">
-                  Login
+                <button className="button ghost" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Logging in..." : "Login"}
                 </button>
                 <Link className="button ghost" to="/register">
                   Register

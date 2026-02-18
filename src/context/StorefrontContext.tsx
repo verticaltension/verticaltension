@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { apiUrl } from "../lib/api";
 
 type AccountProfile = {
   name: string;
@@ -14,10 +15,23 @@ type AccountProfile = {
   preferredCurrency: CurrencyCode;
 };
 
-type StoredAuthUser = {
+type ActionResult = { ok: true } | { ok: false; error: string };
+
+type AuthPayload = {
   name: string;
   email: string;
   password: string;
+};
+
+type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+type ServerUser = {
+  name: string;
+  email: string;
+  preferredCurrency?: string;
 };
 
 export type WishlistItem = {
@@ -96,17 +110,12 @@ type RateStatus = "idle" | "loading" | "ready" | "error";
 type StorefrontContextValue = {
   account: AccountProfile;
   updateAccount: (updates: Partial<AccountProfile>) => void;
+  saveAccount: (updates?: Partial<AccountProfile>) => Promise<ActionResult>;
   isAuthenticated: boolean;
-  registerUser: (payload: {
-    name: string;
-    email: string;
-    password: string;
-  }) => { ok: true } | { ok: false; error: string };
-  loginUser: (payload: {
-    email: string;
-    password: string;
-  }) => { ok: true } | { ok: false; error: string };
-  logoutUser: () => void;
+  isAuthLoading: boolean;
+  registerUser: (payload: AuthPayload) => Promise<ActionResult>;
+  loginUser: (payload: LoginPayload) => Promise<ActionResult>;
+  logoutUser: () => Promise<void>;
   wishlist: WishlistItem[];
   wishlistCount: number;
   isWishlisted: (id: string) => boolean;
@@ -127,10 +136,10 @@ type StorefrontContextValue = {
 };
 
 const ACCOUNT_STORAGE_KEY = "vtp-account-profile";
-const AUTH_USER_STORAGE_KEY = "vtp-auth-user";
-const AUTH_SESSION_STORAGE_KEY = "vtp-auth-session";
 const WISHLIST_STORAGE_KEY = "vtp-wishlist";
 const CART_STORAGE_KEY = "vtp-cart";
+const LEGACY_AUTH_USER_STORAGE_KEY = "vtp-auth-user";
+const LEGACY_AUTH_SESSION_STORAGE_KEY = "vtp-auth-session";
 
 const DEFAULT_ACCOUNT: AccountProfile = {
   name: "",
@@ -167,8 +176,8 @@ const parseStoredJson = <T,>(value: string | null): T | null => {
 };
 
 const validatePasswordStrength = (password: string): string | null => {
-  if (password.length < 10) {
-    return "Password must be at least 10 characters.";
+  if (password.length < 8) {
+    return "Password must be at least 8 characters.";
   }
 
   const hasUpper = /[A-Z]/.test(password);
@@ -183,44 +192,45 @@ const validatePasswordStrength = (password: string): string | null => {
   return null;
 };
 
+const normalizeServerUser = (
+  user: ServerUser,
+  fallbackCurrency: CurrencyCode
+): AccountProfile => {
+  const preferredCurrency = user.preferredCurrency || fallbackCurrency;
+  return {
+    name: user.name || "",
+    email: user.email || "",
+    preferredCurrency: isCurrencyCode(preferredCurrency)
+      ? preferredCurrency
+      : fallbackCurrency,
+  };
+};
+
+const parseApiError = async (response: Response) => {
+  try {
+    const data = (await response.json()) as { error?: string };
+    return data.error || "Request failed.";
+  } catch {
+    return "Request failed.";
+  }
+};
+
+const authFetch = async (path: string, init?: RequestInit) => {
+  const headers = new Headers(init?.headers || undefined);
+  if (!headers.has("Content-Type") && init?.body) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  return fetch(apiUrl(path), {
+    ...init,
+    headers,
+    credentials: "include",
+  });
+};
+
 export function StorefrontProvider({ children }: { children: ReactNode }) {
-  const [authUser, setAuthUser] = useState<StoredAuthUser | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-
-    const parsed = parseStoredJson<StoredAuthUser>(
-      localStorage.getItem(AUTH_USER_STORAGE_KEY)
-    );
-
-    if (
-      parsed &&
-      typeof parsed.email === "string" &&
-      typeof parsed.password === "string" &&
-      typeof parsed.name === "string"
-    ) {
-      return parsed;
-    }
-
-    return null;
-  });
-
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
-
-    const sessionEmail = localStorage.getItem(AUTH_SESSION_STORAGE_KEY);
-    const parsedUser = parseStoredJson<StoredAuthUser>(
-      localStorage.getItem(AUTH_USER_STORAGE_KEY)
-    );
-
-    return Boolean(
-      sessionEmail &&
-        parsedUser &&
-        parsedUser.email.toLowerCase() === sessionEmail.toLowerCase()
-    );
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [account, setAccount] = useState<AccountProfile>(() => {
     if (typeof window === "undefined") {
@@ -285,30 +295,58 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   }, [account]);
 
   useEffect(() => {
-    if (authUser) {
-      localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(authUser));
-      return;
-    }
-
-    localStorage.removeItem(AUTH_USER_STORAGE_KEY);
-  }, [authUser]);
-
-  useEffect(() => {
-    if (isAuthenticated && authUser) {
-      localStorage.setItem(AUTH_SESSION_STORAGE_KEY, authUser.email);
-      return;
-    }
-
-    localStorage.removeItem(AUTH_SESSION_STORAGE_KEY);
-  }, [isAuthenticated, authUser]);
-
-  useEffect(() => {
     localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
   }, [wishlist]);
 
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    localStorage.removeItem(LEGACY_AUTH_USER_STORAGE_KEY);
+    localStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const restoreSession = async () => {
+      setIsAuthLoading(true);
+      try {
+        const response = await authFetch("/api/auth/me", { method: "GET" });
+        if (!response.ok) {
+          if (!cancelled) {
+            setIsAuthenticated(false);
+          }
+          return;
+        }
+
+        const data = (await response.json()) as { user?: ServerUser };
+        if (!data.user || cancelled) {
+          return;
+        }
+
+        setAccount((previous) =>
+          normalizeServerUser(data.user as ServerUser, previous.preferredCurrency)
+        );
+        setIsAuthenticated(true);
+      } catch {
+        if (!cancelled) {
+          setIsAuthenticated(false);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsAuthLoading(false);
+        }
+      }
+    };
+
+    restoreSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -377,71 +415,144 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const saveAccount = useCallback(
+    async (updates?: Partial<AccountProfile>): Promise<ActionResult> => {
+      const base = {
+        ...account,
+        ...updates,
+      };
+      const payload = {
+        name: base.name.trim(),
+        email: base.email.trim(),
+        preferredCurrency: base.preferredCurrency,
+      };
+
+      if (!isAuthenticated) {
+        return { ok: false, error: "Login required." };
+      }
+
+      if (!payload.name || !payload.email) {
+        return { ok: false, error: "Name and email are required." };
+      }
+
+      try {
+        const response = await authFetch("/api/auth/account", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          return { ok: false, error: await parseApiError(response) };
+        }
+
+        const data = (await response.json()) as { user?: ServerUser };
+        if (data.user) {
+          setAccount((previous) =>
+            normalizeServerUser(data.user as ServerUser, previous.preferredCurrency)
+          );
+        }
+        return { ok: true };
+      } catch {
+        return {
+          ok: false,
+          error: "Unable to save account. Please try again.",
+        };
+      }
+    },
+    [account, isAuthenticated]
+  );
+
   const registerUser = useCallback(
-    (payload: { name: string; email: string; password: string }) => {
+    async (payload: AuthPayload): Promise<ActionResult> => {
       const name = payload.name.trim();
       const email = payload.email.trim().toLowerCase();
       const password = payload.password;
 
       if (!name || !email || !password) {
-        return { ok: false as const, error: "All fields are required." };
+        return { ok: false, error: "All fields are required." };
       }
 
       const passwordError = validatePasswordStrength(password);
       if (passwordError) {
-        return {
-          ok: false as const,
-          error: passwordError,
-        };
+        return { ok: false, error: passwordError };
       }
 
-      if (authUser && authUser.email.toLowerCase() === email) {
-        return {
-          ok: false as const,
-          error: "An account with this email already exists.",
-        };
+      try {
+        const response = await authFetch("/api/auth/register", {
+          method: "POST",
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            preferredCurrency: account.preferredCurrency,
+          }),
+        });
+
+        if (!response.ok) {
+          return { ok: false, error: await parseApiError(response) };
+        }
+
+        const data = (await response.json()) as { user?: ServerUser };
+        if (data.user) {
+          setAccount((previous) =>
+            normalizeServerUser(data.user as ServerUser, previous.preferredCurrency)
+          );
+        }
+        setIsAuthenticated(true);
+        return { ok: true };
+      } catch {
+        return { ok: false, error: "Unable to register account right now." };
       }
-
-      const nextUser: StoredAuthUser = { name, email, password };
-      setAuthUser(nextUser);
-      setIsAuthenticated(true);
-      setAccount((previous) => ({
-        ...previous,
-        name,
-        email,
-      }));
-
-      return { ok: true as const };
     },
-    [authUser]
+    [account.preferredCurrency]
   );
 
   const loginUser = useCallback(
-    (payload: { email: string; password: string }) => {
+    async (payload: LoginPayload): Promise<ActionResult> => {
       const email = payload.email.trim().toLowerCase();
       const password = payload.password;
 
-      if (!authUser) {
-        return { ok: false as const, error: "No registered account found." };
+      if (!email || !password) {
+        return { ok: false, error: "Email and password are required." };
       }
 
-      if (authUser.email.toLowerCase() !== email || authUser.password !== password) {
-        return { ok: false as const, error: "Invalid email or password." };
-      }
+      try {
+        const response = await authFetch("/api/auth/login", {
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+        });
 
-      setIsAuthenticated(true);
-      setAccount((previous) => ({
-        ...previous,
-        name: authUser.name,
-        email: authUser.email,
-      }));
-      return { ok: true as const };
+        if (!response.ok) {
+          return { ok: false, error: await parseApiError(response) };
+        }
+
+        const data = (await response.json()) as { user?: ServerUser };
+        if (data.user) {
+          setAccount((previous) =>
+            normalizeServerUser(data.user as ServerUser, previous.preferredCurrency)
+          );
+        }
+        setIsAuthenticated(true);
+        return { ok: true };
+      } catch {
+        return { ok: false, error: "Unable to login right now." };
+      }
     },
-    [authUser]
+    []
   );
 
-  const logoutUser = useCallback(() => {
+  const logoutUser = useCallback(async () => {
+    try {
+      await authFetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      // Ignore network failures and clear local state anyway.
+    }
+
     setIsAuthenticated(false);
+    setAccount((previous) => ({
+      ...previous,
+      name: "",
+      email: "",
+    }));
   }, []);
 
   const isWishlisted = useCallback(
@@ -508,7 +619,9 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     () => ({
       account,
       updateAccount,
+      saveAccount,
       isAuthenticated,
+      isAuthLoading,
       registerUser,
       loginUser,
       logoutUser,
@@ -529,7 +642,9 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     [
       account,
       updateAccount,
+      saveAccount,
       isAuthenticated,
+      isAuthLoading,
       registerUser,
       loginUser,
       logoutUser,

@@ -10,8 +10,9 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
 
@@ -20,7 +21,10 @@ export default function Register() {
       return;
     }
 
-    const result = registerUser({ name, email, password });
+    setIsSubmitting(true);
+    const result = await registerUser({ name, email, password });
+    setIsSubmitting(false);
+
     if (!result.ok) {
       setError(result.error);
       return;
@@ -36,11 +40,11 @@ export default function Register() {
           <div className="card">
             <h2>Register</h2>
             <p className="muted">
-              Create your local storefront account to manage profile data,
+              Create your storefront account to manage profile data,
               wishlist, and cart from one place.
             </p>
             <p className="muted">
-              Password must be at least 10 characters and include uppercase,
+              Password must be at least 8 characters and include uppercase,
               lowercase, a number, and a symbol.
             </p>
             {isAuthenticated && (
@@ -76,7 +80,7 @@ export default function Register() {
                   name="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  placeholder="At least 10 characters, mixed types"
+                  placeholder="At least 8 characters, mixed types"
                 />
               </label>
               <label>
@@ -90,8 +94,8 @@ export default function Register() {
                 />
               </label>
               <div className="form-actions">
-                <button className="button ghost" type="submit">
-                  Register
+                <button className="button ghost" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Registering..." : "Register"}
                 </button>
                 <Link className="button ghost" to="/login">
                   Login

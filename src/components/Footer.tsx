@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useConsent } from "../context/ConsentContext";
 
 export default function Footer() {
+  const { openConsentSettings } = useConsent();
+
   return (
     <footer className="site-footer">
       <div className="container footer-grid">
@@ -77,6 +80,11 @@ export default function Footer() {
           </p>
           <p>
             <Link to="/shipping-payment">Shipping &amp; Payment / Versand &amp; Zahlung</Link>
+          </p>
+          <p>
+            <button className="footer-link-button" type="button" onClick={openConsentSettings}>
+              Cookie &amp; Privacy Settings / Einwilligung
+            </button>
           </p>
         </div>
       </div>

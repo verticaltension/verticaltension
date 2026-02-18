@@ -9,13 +9,14 @@ import {
 export default function Account() {
   const {
     account,
-    updateAccount,
+    saveAccount,
     wishlist,
     removeWishlistItem,
     wishlistCount,
     addToCart,
     isInCart,
     isAuthenticated,
+    isAuthLoading,
   } = useStorefront();
 
   const [draft, setDraft] = useState({
@@ -24,6 +25,7 @@ export default function Account() {
     preferredCurrency: account.preferredCurrency,
   });
   const [saveNotice, setSaveNotice] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setDraft({
@@ -43,17 +45,41 @@ export default function Account() {
     }));
   };
 
-  const handleProfileSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleProfileSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    updateAccount({
+    setIsSaving(true);
+    setSaveNotice("");
+    const result = await saveAccount({
       name: draft.name.trim(),
       email: draft.email.trim(),
       preferredCurrency: draft.preferredCurrency as CurrencyCode,
     });
+    setIsSaving(false);
+
+    if (!result.ok) {
+      setSaveNotice(result.error);
+      return;
+    }
+
     setSaveNotice("Profile saved.");
   };
 
   const canSaveProfile = Boolean(draft.name.trim() && draft.email.trim());
+
+  if (isAuthLoading) {
+    return (
+      <div className="page">
+        <section className="section">
+          <div className="container account-layout">
+            <div className="card">
+              <h2>Account Access</h2>
+              <p className="muted">Checking your account session...</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
@@ -88,7 +114,7 @@ export default function Account() {
             <span className="badge">Account</span>
             <h1>Wishlist, Profile, and Currency</h1>
             <p>
-              Manage your local account profile and wishlist. Payhip remains the
+              Manage your account profile and wishlist. Payhip remains the
               payment and checkout provider.
             </p>
           </div>
@@ -144,8 +170,12 @@ export default function Account() {
                 </select>
               </label>
               <div className="form-actions">
-                <button className="button ghost" type="submit" disabled={!canSaveProfile}>
-                  Save Profile
+                <button
+                  className="button ghost"
+                  type="submit"
+                  disabled={!canSaveProfile || isSaving}
+                >
+                  {isSaving ? "Saving..." : "Save Profile"}
                 </button>
                 {saveNotice && <span className="muted">{saveNotice}</span>}
               </div>

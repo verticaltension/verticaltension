@@ -1,7 +1,8 @@
 import { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import ConsentBanner from "./components/ConsentBanner";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -11,7 +12,9 @@ const Account = lazy(() => import("./pages/Account"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Contact = lazy(() => import("./pages/Contact"));
-const AlienEchoes = lazy(() => import("./pages/AlienEchoes"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const ThankYou = lazy(() => import("./pages/ThankYou"));
 const Impressum = lazy(() => import("./pages/Impressum"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -41,7 +44,18 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/account" element={<Account />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/alien-echoes" element={<AlienEchoes />} />
+            <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route
+              path="/alien-echoes"
+              element={
+                <Navigate
+                  to="/blog/alien-echoes-consolidated-overview"
+                  replace
+                />
+              }
+            />
             <Route path="/impressum" element={<Impressum />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
@@ -51,6 +65,7 @@ export default function App() {
         </Suspense>
       </main>
       <Footer />
+      <ConsentBanner />
     </div>
   );
 }

@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import { useStorefront } from "../context/StorefrontContext";
-import { PAYHIP_CART_URL, getPayhipHref } from "../lib/payhip";
+import { PAYHIP_CART_URL, getPayhipHref, markCheckoutPending } from "../lib/payhip";
 
 export default function Cart() {
   const { cart, cartCount, removeCartItem, clearCart } = useStorefront();
+
+  const handleProceedToCheckout = () => {
+    markCheckoutPending();
+  };
 
   return (
     <div className="page">
@@ -78,7 +82,7 @@ export default function Cart() {
             <h2>Ready to complete your order?</h2>
             <p>
               Use the button to continue to Payhip for final checkout and
-              payment processing.
+              payment processing, then return to the on-site thank-you page.
             </p>
           </div>
           <div className="button-row">
@@ -88,7 +92,11 @@ export default function Cart() {
             <button className="button ghost" type="button" onClick={clearCart}>
               Clear Cart
             </button>
-            <a className="button primary" href={PAYHIP_CART_URL}>
+            <a
+              className="button primary"
+              href={PAYHIP_CART_URL}
+              onClick={handleProceedToCheckout}
+            >
               Proceed to Payhip Checkout
             </a>
           </div>

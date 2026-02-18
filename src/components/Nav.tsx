@@ -15,6 +15,7 @@ export default function Nav() {
     account,
     updateAccount,
     isAuthenticated,
+    isAuthLoading,
     logoutUser,
   } = useStorefront();
 
@@ -72,8 +73,8 @@ export default function Nav() {
           <NavLink to="/about" onClick={() => setOpen(false)}>
             About
           </NavLink>
-          <NavLink to="/alien-echoes" onClick={() => setOpen(false)}>
-            Alien Echoes
+          <NavLink to="/blog" onClick={() => setOpen(false)}>
+            Blog
           </NavLink>
           <NavLink to="/shop" onClick={() => setOpen(false)}>
             Shop
@@ -81,7 +82,7 @@ export default function Nav() {
           <NavLink to="/contact" onClick={() => setOpen(false)}>
             Contact
           </NavLink>
-          {isAuthenticated ? (
+          {isAuthLoading ? null : isAuthenticated ? (
             <NavLink
               className="account-mobile-link"
               to="/account"
@@ -130,7 +131,7 @@ export default function Nav() {
           </div>
         </nav>
         <div className="nav-actions">
-          {isAuthenticated ? (
+          {isAuthLoading ? null : isAuthenticated ? (
             <NavLink className="account-link account-link-main" to="/account">
               <span>Account</span>
               {wishlistCount > 0 && (
@@ -157,8 +158,14 @@ export default function Nav() {
               </span>
             )}
           </NavLink>
-          {isAuthenticated && (
-            <button className="account-link nav-auth-button" type="button" onClick={logoutUser}>
+          {!isAuthLoading && isAuthenticated && (
+            <button
+              className="account-link nav-auth-button"
+              type="button"
+              onClick={() => {
+                void logoutUser();
+              }}
+            >
               Logout
             </button>
           )}
