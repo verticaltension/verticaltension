@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getBlogPostBySlug } from "../data/blogPosts";
 
@@ -10,6 +11,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 export default function BlogPost() {
   const { slug } = useParams();
   const post = slug ? getBlogPostBySlug(slug) : undefined;
+  const [shareStatus, setShareStatus] = useState("");
 
   if (!post) {
     return (
@@ -33,6 +35,44 @@ export default function BlogPost() {
     );
   }
 
+  const handleShare = async () => {
+    const shareUrl =
+      typeof window !== "undefined"
+        ? window.location.href
+        : `/blog/${post.slug}`;
+
+    try {
+      if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+        await navigator.share({
+          title: post.title,
+          text: post.summary,
+          url: shareUrl,
+        });
+        setShareStatus("Post shared.");
+        return;
+      }
+
+      if (
+        typeof navigator !== "undefined" &&
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === "function"
+      ) {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareStatus("Link copied to clipboard.");
+        return;
+      }
+
+      setShareStatus("Sharing is not supported on this device.");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        setShareStatus("");
+        return;
+      }
+
+      setShareStatus("Unable to share this post right now.");
+    }
+  };
+
   return (
     <div className="page">
       <section className="hero">
@@ -52,6 +92,25 @@ export default function BlogPost() {
                 </span>
               ))}
             </div>
+            <div className="button-row blog-share-row">
+              <button
+                className="button ghost"
+                type="button"
+                onClick={() => {
+                  void handleShare();
+                }}
+              >
+                Share Post
+              </button>
+              <Link className="button ghost" to="/blog">
+                Back to Blog
+              </Link>
+            </div>
+            {shareStatus && (
+              <p className="muted blog-share-status" role="status" aria-live="polite">
+                {shareStatus}
+              </p>
+            )}
           </div>
         </div>
       </section>

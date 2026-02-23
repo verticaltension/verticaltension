@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import ConsentBanner from "./components/ConsentBanner";
+import ScrollToTop from "./components/ScrollToTop";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -20,11 +21,13 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Withdrawal = lazy(() => import("./pages/Withdrawal"));
 const ShippingPayment = lazy(() => import("./pages/ShippingPayment"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
   return (
     <div className="app-shell">
       <Nav />
+      <ScrollToTop />
       <main>
         <Suspense
           fallback={
@@ -61,6 +64,7 @@ export default function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/withdrawal" element={<Withdrawal />} />
             <Route path="/shipping-payment" element={<ShippingPayment />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>

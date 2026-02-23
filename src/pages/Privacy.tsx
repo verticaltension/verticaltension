@@ -1,3 +1,5 @@
+import { siteIdentity, siteIdentityText } from "../config/siteIdentity";
+
 export default function Privacy() {
   return (
     <div className="page">
@@ -5,9 +7,9 @@ export default function Privacy() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="badge">Privacy</span>
-            <h1>Privacy Policy / Datenschutzerklaerung</h1>
+            <h1>Privacy Policy / Datenschutzerklärung</h1>
             <p>
-              This policy explains how Vertical Tension Press processes personal
+              This policy explains how {siteIdentity.brandName} processes personal
               data for website operation, account features, support handling, and
               Payhip checkout flow.
             </p>
@@ -32,8 +34,8 @@ export default function Privacy() {
           <div className="card">
             <h3>1. Controller</h3>
             <p>
-              Vertical Tension Press, Berlin, Germany. Contact:
-              inquiries@verticaltension.com.
+              {siteIdentity.brandName}, {siteIdentityText.addressLineEN}. Contact:{" "}
+              {siteIdentity.contact.email}.
             </p>
 
             <h3>2. Data Processed</h3>
@@ -88,7 +90,7 @@ export default function Privacy() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <h2>Datenschutzerklaerung (Deutsch)</h2>
+            <h2>Datenschutzerklärung (Deutsch)</h2>
             <p>
               Verantwortliche Informationen zum Datenschutz fuer diese Website und
               den Storefront-Betrieb.
@@ -97,8 +99,8 @@ export default function Privacy() {
           <div className="card">
             <h3>1. Verantwortlicher</h3>
             <p>
-              Vertical Tension Press, Berlin, Deutschland. Kontakt:
-              inquiries@verticaltension.com.
+              {siteIdentity.brandName}, {siteIdentityText.addressLineDE}. Kontakt:{" "}
+              {siteIdentity.contact.email}.
             </p>
 
             <h3>2. Verarbeitete Daten</h3>

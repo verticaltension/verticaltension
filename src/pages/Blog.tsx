@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { getBlogPosts } from "../data/blogPosts";
 
@@ -8,7 +9,27 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 export default function Blog() {
+  const [query, setQuery] = useState("");
   const posts = getBlogPosts();
+  const normalizedQuery = query.trim().toLowerCase();
+  const visiblePosts = useMemo(() => {
+    if (!normalizedQuery) {
+      return posts;
+    }
+
+    return posts.filter((post) => {
+      const haystack = [
+        post.title,
+        post.summary,
+        post.author,
+        post.tags.join(" "),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(normalizedQuery);
+    });
+  }, [normalizedQuery, posts]);
 
   return (
     <div className="page">
@@ -37,12 +58,40 @@ export default function Blog() {
         <div className="container">
           <div className="section-head">
             <h2>Latest Posts</h2>
-            <p>
-              Each post has a dedicated permalink and archival metadata.
+            <div className="blog-search-controls">
+              <input
+                className="blog-search-input"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search by title, summary, or tag"
+                aria-label="Search blog posts"
+              />
+              {query && (
+                <button
+                  className="button ghost"
+                  type="button"
+                  onClick={() => setQuery("")}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            <p className="muted blog-search-meta">
+              {visiblePosts.length} {visiblePosts.length === 1 ? "post" : "posts"}
+              {normalizedQuery ? ` matching "${query.trim()}"` : ""}
             </p>
           </div>
-          <div className="blog-grid">
-            {posts.map((post) => (
+          {visiblePosts.length === 0 ? (
+            <div className="card">
+              <h3>No posts found</h3>
+              <p className="muted">
+                Try a different keyword or clear the search to view all posts.
+              </p>
+            </div>
+          ) : (
+            <div className="blog-grid">
+              {visiblePosts.map((post) => (
               <article className="card blog-card" key={post.slug}>
                 <span className="badge">Post</span>
                 <h3>{post.title}</h3>
@@ -64,8 +113,9 @@ export default function Blog() {
                   </Link>
                 </div>
               </article>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

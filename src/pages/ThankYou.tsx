@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useStorefront } from "../context/StorefrontContext";
 import { consumeCheckoutPending, getCheckoutSuccessUrl } from "../lib/payhip";
+import { siteIdentity } from "../config/siteIdentity";
 
 export default function ThankYou() {
   const { clearCart } = useStorefront();
@@ -57,7 +58,7 @@ export default function ThankYou() {
               your Payhip order details.
             </p>
             <div className="button-row">
-              <a className="button ghost" href="mailto:inquiries@verticaltension.com">
+              <a className="button ghost" href={siteIdentity.contact.emailHref}>
                 Contact Support
               </a>
             </div>

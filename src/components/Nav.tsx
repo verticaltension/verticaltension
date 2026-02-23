@@ -5,6 +5,7 @@ import {
   type CurrencyCode,
   useStorefront,
 } from "../context/StorefrontContext";
+import { siteIdentity } from "../config/siteIdentity";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
@@ -62,9 +63,9 @@ export default function Nav() {
         <NavLink className="brand" to="/">
           <img
             src="/publisher_logo/logo.png"
-            alt="Vertical Tension Press logo"
+            alt={`${siteIdentity.brandName} logo`}
           />
-          <span>Vertical Tension Press</span>
+          <span>{siteIdentity.brandName}</span>
         </NavLink>
         <nav className={`nav-links ${open ? "is-open" : ""}`}>
           <NavLink to="/" end onClick={() => setOpen(false)}>

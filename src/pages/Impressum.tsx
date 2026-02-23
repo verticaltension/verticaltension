@@ -1,3 +1,5 @@
+import { siteIdentity, siteIdentityText } from "../config/siteIdentity";
+
 export default function Impressum() {
   return (
     <div className="page">
@@ -8,15 +10,15 @@ export default function Impressum() {
             <h1>Legal Notice / Impressum</h1>
             <p>
               Information pursuant to § 5 Digitale-Dienste-Gesetz (DDG). This
-              page provides provider identification for Vertical Tension Press.
+              page provides provider identification for {siteIdentity.brandName}.
             </p>
           </div>
           <div className="hero-panel">
             <h2>Contact / Kontakt</h2>
             <ul>
-              <li>inquiries@verticaltension.com</li>
-              <li>+49 178 3204703</li>
-              <li>Lüderitzstr. 14, 13351 Berlin</li>
+              <li>{siteIdentity.contact.email}</li>
+              <li>{siteIdentity.contact.phoneDisplay}</li>
+              <li>{siteIdentityText.addressLine}</li>
             </ul>
           </div>
         </div>
@@ -34,50 +36,54 @@ export default function Impressum() {
           <div className="card">
             <p>Information pursuant to § 5 Digitale-Dienste-Gesetz (DDG)</p>
             <p>
-              Vertical Tension Press
+              {siteIdentity.brandName}
               <br />
-              Lüderitzstr. 14
+              {siteIdentity.address.street}
               <br />
-              13351 Berlin
+              {siteIdentity.address.postalCodeCity}
               <br />
-              Germany
+              {siteIdentity.address.countryEN}
             </p>
             <p>
               Represented by the Managing Director:
               <br />
-              Marvin G. Johnson
+              {siteIdentity.management.managingDirector}
             </p>
             <p>
               VAT identification number in accordance with § 27a UStG:
               <br />
-              DE307965566
+              {siteIdentity.tax.vatId}
             </p>
             <p>
               Contact:
               <br />
-              Phone: +49 178 3204703
+              Phone:{" "}
+              <a href={siteIdentity.contact.phoneHref}>
+                {siteIdentity.contact.phoneDisplay}
+              </a>
               <br />
-              E-mail: inquiries@verticaltension.com
+              E-mail:{" "}
+              <a href={siteIdentity.contact.emailHref}>
+                {siteIdentity.contact.email}
+              </a>
             </p>
             <p>
-              [Optional - if registered:]
+              Commercial register:
               <br />
-              Commercial register: Local Court Berlin-Charlottenburg HRB [Your number]
+              No entry in the commercial register.
               <br />
-              Register court: Local Court Berlin-Charlottenburg
+              Register court: Not applicable.
             </p>
             <p>
-              [Optional - if applicable:]
+              Competent supervisory authority:
               <br />
-              Competent supervisory authority: ...
+              Not applicable.
             </p>
             <p>
-              [Optional - for media content:]
-              <br />
               Person responsible for content pursuant to § 18 para. 2
               Medienstaatsvertrag (MStV):
               <br />
-              Marvin G. Johnson (address and contact see above)
+              {siteIdentity.management.managingDirector} (address and contact see above).
             </p>
           </div>
         </div>
@@ -95,50 +101,54 @@ export default function Impressum() {
           <div className="card">
             <p>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p>
             <p>
-              Vertical Tension Press
+              {siteIdentity.brandName}
               <br />
-              Lüderitzstr. 14
+              {siteIdentity.address.street}
               <br />
-              13351 Berlin
+              {siteIdentity.address.postalCodeCity}
               <br />
-              Deutschland
+              {siteIdentity.address.countryDE}
             </p>
             <p>
               Vertreten durch den Geschäftsführer:
               <br />
-              Marvin G. Johnson
+              {siteIdentity.management.managingDirector}
             </p>
             <p>
               Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:
               <br />
-              DE307965566
+              {siteIdentity.tax.vatId}
             </p>
             <p>
               Kontakt:
               <br />
-              Telefon: +49 178 3204703
+              Telefon:{" "}
+              <a href={siteIdentity.contact.phoneHref}>
+                {siteIdentity.contact.phoneDisplay}
+              </a>
               <br />
-              E-Mail: inquiries@verticaltension.com
+              E-Mail:{" "}
+              <a href={siteIdentity.contact.emailHref}>
+                {siteIdentity.contact.email}
+              </a>
             </p>
             <p>
-              [Optional - falls Handelsregister vorhanden:]
+              Handelsregister:
               <br />
-              Handelsregister: Amtsgericht Berlin-Charlottenburg HRB [Ihre Nummer]
+              Kein Eintrag im Handelsregister.
               <br />
-              Registergericht: Amtsgericht Berlin-Charlottenburg
+              Registergericht: Nicht anwendbar.
             </p>
             <p>
-              [Optional - falls zutreffend:]
+              Zuständige Aufsichtsbehörde:
               <br />
-              Zuständige Aufsichtsbehörde: ...
+              Nicht anwendbar.
             </p>
             <p>
-              [Optional - bei redaktionellen Inhalten:]
+              Inhaltlich Verantwortlicher gemäß § 18 Abs. 2
+              Medienstaatsvertrag (MStV):
               <br />
-              Inhaltlich Verantwortlicher gemäß § 18 Abs. 2 Medienstaatsvertrag
-              (MStV):
-              <br />
-              Marvin G. Johnson (Anschrift und Kontakt siehe oben)
+              {siteIdentity.management.managingDirector} (Anschrift und Kontakt siehe oben).
             </p>
           </div>
         </div>

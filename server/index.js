@@ -475,6 +475,13 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
   const email = normalizeEmail(req.body?.email || "");
   const subject = normalizeText(req.body?.subject || "");
   const message = normalizeText(req.body?.message || "");
+  const company = normalizeText(req.body?.company || "");
+
+  // Honeypot trap for automated spam submissions.
+  if (company) {
+    res.json({ ok: true });
+    return;
+  }
 
   if (!name || !email || !message) {
     res.status(400).json({ error: "Missing required fields." });

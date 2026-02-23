@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useConsent } from "../context/ConsentContext";
+import { siteIdentity } from "../config/siteIdentity";
 
 export default function Footer() {
   const { openConsentSettings } = useConsent();
@@ -11,9 +12,9 @@ export default function Footer() {
           <div className="brand">
             <img
               src="/publisher_logo/logo.png"
-              alt="Vertical Tension Press logo"
+              alt={`${siteIdentity.brandName} logo`}
             />
-            <span>Vertical Tension Press</span>
+            <span>{siteIdentity.brandName}</span>
           </div>
           <p className="muted">
             Independent publisher of speculative science, philosophical synthesis,
@@ -22,8 +23,18 @@ export default function Footer() {
         </div>
         <div>
           <strong>Contact</strong>
-          <p>inquiries@verticaltension.com</p>
-          <p>Berlin, DE</p>
+          <p>
+            <a href={siteIdentity.contact.emailHref}>
+              {siteIdentity.contact.email}
+            </a>
+          </p>
+          <p>{siteIdentity.address.street}</p>
+          <p>
+            {siteIdentity.address.postalCodeCity}, {siteIdentity.address.countryCode}
+          </p>
+          <p>
+            <Link to="/contact">Contact form</Link>
+          </p>
         </div>
         <div>
           <strong>Follow</strong>
@@ -38,15 +49,6 @@ export default function Footer() {
           </p>
           <p>
             <a
-              href="https://x.com/verticaltension"
-              target="_blank"
-              rel="noreferrer"
-            >
-              X
-            </a>
-          </p>
-          <p>
-            <a
               href="https://www.instagram.com/verticaltensionpress/"
               target="_blank"
               rel="noreferrer"
@@ -56,11 +58,29 @@ export default function Footer() {
           </p>
           <p>
             <a
+              href="https://www.tiktok.com/@verticaltensionpress"
+              target="_blank"
+              rel="noreferrer"
+            >
+              TikTok
+            </a>
+          </p>
+          <p>
+            <a
               href="https://www.reddit.com/user/verticaltensionpress/"
               target="_blank"
               rel="noreferrer"
             >
               Reddit
+            </a>
+          </p>
+          <p>
+            <a
+              href="https://x.com/verticaltension"
+              target="_blank"
+              rel="noreferrer"
+            >
+              X
             </a>
           </p>
         </div>

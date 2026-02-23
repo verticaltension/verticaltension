@@ -1,11 +1,13 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import { apiUrl } from "../lib/api";
+import { siteIdentity, siteIdentityText } from "../config/siteIdentity";
 
 const initialForm = {
   name: "",
   email: "",
   subject: "",
   message: "",
+  company: "",
 };
 
 export default function Contact() {
@@ -13,6 +15,15 @@ export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
+  const [statusMessage, setStatusMessage] = useState("");
+
+  const isFormValid = useMemo(() => {
+    return (
+      form.name.trim().length > 0 &&
+      form.email.trim().length > 0 &&
+      form.message.trim().length > 0
+    );
+  }, [form]);
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,7 +34,20 @@ export default function Contact() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!isFormValid || status === "sending") {
+      return;
+    }
+
+    // Honeypot trap for basic bot submissions.
+    if (form.company.trim().length > 0) {
+      setStatus("sent");
+      setStatusMessage("Message received. We will reply soon.");
+      setForm(initialForm);
+      return;
+    }
+
     setStatus("sending");
+    setStatusMessage("");
     const controller = new AbortController();
     const timeoutId = window.setTimeout(() => controller.abort(), 10000);
 
@@ -35,12 +59,29 @@ export default function Contact() {
         signal: controller.signal,
       });
       if (!response.ok) {
-        throw new Error("Contact request failed");
+        const payload = await response
+          .json()
+          .catch(() => ({ error: "Contact request failed." }));
+        const retryAfter = response.headers.get("Retry-After");
+        if (response.status === 429 && retryAfter) {
+          throw new Error(
+            `Too many requests. Please retry in about ${retryAfter} seconds.`
+          );
+        }
+        throw new Error(payload.error || "Contact request failed.");
       }
       setStatus("sent");
+      setStatusMessage("Message received. We will reply soon.");
       setForm(initialForm);
     } catch (error) {
       setStatus("error");
+      if (error instanceof DOMException && error.name === "AbortError") {
+        setStatusMessage("Request timed out. Please try again or email us directly.");
+      } else if (error instanceof Error) {
+        setStatusMessage(error.message);
+      } else {
+        setStatusMessage("Something went wrong. Email us directly instead.");
+      }
     } finally {
       window.clearTimeout(timeoutId);
     }
@@ -60,8 +101,12 @@ export default function Contact() {
           <div className="hero-panel">
             <h2>Direct Channels</h2>
             <ul>
-              <li>inquiries@verticaltension.com</li>
-              <li>Berlin, DE</li>
+              <li>
+                <a href={siteIdentity.contact.emailHref}>
+                  {siteIdentity.contact.email}
+                </a>
+              </li>
+              <li>{siteIdentityText.addressLine}</li>
               <li>Press Kit on Request</li>
             </ul>
           </div>
@@ -73,53 +118,101 @@ export default function Contact() {
           <div className="section-head">
             <h2>Send a Message</h2>
             <p>
-              Messages are captured via the Vertical Tension Press inbox. You
+              Messages are captured via the {siteIdentity.brandName} inbox. You
               will receive a response within a few days.
             </p>
-            {status === "sent" && (
-              <p className="muted">Message received. We will reply soon.</p>
-            )}
-            {status === "error" && (
-              <p className="muted">
-                Something went wrong. Email us directly instead.
+            {statusMessage && (
+              <p className="muted" role="status" aria-live="polite">
+                {statusMessage}
               </p>
             )}
           </div>
-          <form className="form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Name"
-              aria-label="Name"
-            />
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Email"
-              aria-label="Email"
-            />
-            <input
-              type="text"
-              name="subject"
-              value={form.subject}
-              onChange={handleChange}
-              placeholder="Subject"
-              aria-label="Subject"
-            />
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Tell us about your project"
-              aria-label="Message"
-            />
-            <button className="button primary" type="submit">
-              {status === "sending" ? "Sending..." : "Send Message"}
-            </button>
+          <form className="form" onSubmit={handleSubmit} aria-busy={status === "sending"}>
+            <label>
+              <span>
+                Name <span className="required">*</span>
+              </span>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Name"
+                required
+                autoComplete="name"
+                maxLength={120}
+              />
+            </label>
+            <label>
+              <span>
+                Email <span className="required">*</span>
+              </span>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Email"
+                required
+                autoComplete="email"
+                inputMode="email"
+                maxLength={254}
+              />
+            </label>
+            <label>
+              Subject (Optional)
+              <input
+                type="text"
+                name="subject"
+                value={form.subject}
+                onChange={handleChange}
+                placeholder="Subject"
+                maxLength={200}
+              />
+            </label>
+            <label>
+              <span>
+                Message <span className="required">*</span>
+              </span>
+              <textarea
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Tell us about your project"
+                required
+                maxLength={5000}
+              />
+            </label>
+            <label
+              style={{
+                position: "absolute",
+                left: "-10000px",
+                width: "1px",
+                height: "1px",
+                overflow: "hidden",
+              }}
+              aria-hidden="true"
+            >
+              Company
+              <input
+                type="text"
+                name="company"
+                value={form.company}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </label>
+            <div className="form-actions">
+              <button
+                className="button primary"
+                type="submit"
+                disabled={status === "sending" || !isFormValid}
+              >
+                {status === "sending" ? "Sending..." : "Send Message"}
+              </button>
+              <p className="muted">* Required Fields</p>
+            </div>
           </form>
         </div>
       </section>
