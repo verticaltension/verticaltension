@@ -35,11 +35,30 @@ export default function BlogPost() {
     );
   }
 
+  const getShareUrl = () =>
+    typeof window !== "undefined"
+      ? window.location.href
+      : `https://verticaltension.com/blog/${post.slug}`;
+
+  const copyShareUrl = async (successMessage = "Link copied to clipboard.") => {
+    const shareUrl = getShareUrl();
+
+    if (
+      typeof navigator !== "undefined" &&
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareStatus(successMessage);
+      return true;
+    }
+
+    setShareStatus("Clipboard copy is not supported on this device.");
+    return false;
+  };
+
   const handleShare = async () => {
-    const shareUrl =
-      typeof window !== "undefined"
-        ? window.location.href
-        : `/blog/${post.slug}`;
+    const shareUrl = getShareUrl();
 
     try {
       if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
@@ -52,17 +71,9 @@ export default function BlogPost() {
         return;
       }
 
-      if (
-        typeof navigator !== "undefined" &&
-        navigator.clipboard &&
-        typeof navigator.clipboard.writeText === "function"
-      ) {
-        await navigator.clipboard.writeText(shareUrl);
-        setShareStatus("Link copied to clipboard.");
+      if (await copyShareUrl("Link copied to clipboard.")) {
         return;
       }
-
-      setShareStatus("Sharing is not supported on this device.");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         setShareStatus("");
@@ -72,6 +83,14 @@ export default function BlogPost() {
       setShareStatus("Unable to share this post right now.");
     }
   };
+
+  const shareUrl = getShareUrl();
+  const encodedShareUrl = encodeURIComponent(shareUrl);
+  const encodedShareTitle = encodeURIComponent(post.title);
+  const redditShareUrl = `https://www.reddit.com/submit?url=${encodedShareUrl}&title=${encodedShareTitle}`;
+  const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedShareUrl}`;
+  const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedShareUrl}`;
+  const teamsShareUrl = `https://teams.microsoft.com/share?href=${encodedShareUrl}&msgText=${encodedShareTitle}`;
 
   return (
     <div className="page">
@@ -105,6 +124,58 @@ export default function BlogPost() {
               <Link className="button ghost" to="/blog">
                 Back to Blog
               </Link>
+            </div>
+            <div className="blog-share-platforms" aria-label="Share to social platforms">
+              <a
+                className="blog-share-chip"
+                href={linkedInShareUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Share to LinkedIn
+              </a>
+              <a
+                className="blog-share-chip"
+                href={redditShareUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Share to Reddit
+              </a>
+              <button
+                className="blog-share-chip"
+                type="button"
+                onClick={() => {
+                  void copyShareUrl("Link copied for Instagram sharing.");
+                }}
+              >
+                Instagram (Copy Link)
+              </button>
+              <button
+                className="blog-share-chip"
+                type="button"
+                onClick={() => {
+                  void copyShareUrl("Link copied for TikTok sharing.");
+                }}
+              >
+                TikTok (Copy Link)
+              </button>
+              <a
+                className="blog-share-chip"
+                href={facebookShareUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Share to Facebook
+              </a>
+              <a
+                className="blog-share-chip"
+                href={teamsShareUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Share to Microsoft Teams
+              </a>
             </div>
             {shareStatus && (
               <p className="muted blog-share-status" role="status" aria-live="polite">
