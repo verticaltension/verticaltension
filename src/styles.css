@@ -692,6 +692,7 @@ main {
 
 .blog-share-row {
   margin-top: 8px;
+  justify-content: center;
 }
 
 .blog-share-status {

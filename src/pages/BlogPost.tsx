@@ -92,25 +92,6 @@ export default function BlogPost() {
                 </span>
               ))}
             </div>
-            <div className="button-row blog-share-row">
-              <button
-                className="button ghost"
-                type="button"
-                onClick={() => {
-                  void handleShare();
-                }}
-              >
-                Share Post
-              </button>
-              <Link className="button ghost" to="/blog">
-                Back to Blog
-              </Link>
-            </div>
-            {shareStatus && (
-              <p className="muted blog-share-status" role="status" aria-live="polite">
-                {shareStatus}
-              </p>
-            )}
           </div>
         </div>
       </section>
@@ -140,6 +121,25 @@ export default function BlogPost() {
               return <blockquote key={index}>{block.text}</blockquote>;
             })}
           </article>
+          <div className="button-row blog-share-row">
+            <button
+              className="button ghost"
+              type="button"
+              onClick={() => {
+                void handleShare();
+              }}
+            >
+              Share Post
+            </button>
+            <Link className="button ghost" to="/blog">
+              Back to Blog
+            </Link>
+          </div>
+          {shareStatus && (
+            <p className="muted blog-share-status" role="status" aria-live="polite">
+              {shareStatus}
+            </p>
+          )}
         </div>
       </section>
     </div>
