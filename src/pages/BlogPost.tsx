@@ -48,7 +48,7 @@ export default function BlogPost() {
           text: post.summary,
           url: shareUrl,
         });
-        setShareStatus("Post shared.");
+        setShareStatus("");
         return;
       }
 
