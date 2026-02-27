@@ -247,6 +247,7 @@ main {
 .nav-auth-button {
   background: transparent;
   font-family: inherit;
+  color: var(--ink);
 }
 
 .account-link-main,
