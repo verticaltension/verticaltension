@@ -83,6 +83,15 @@ export default function Footer() {
               X
             </a>
           </p>
+          <p>
+            <a
+              href="https://www.youtube.com/@verticaltensionpress"
+              target="_blank"
+              rel="noreferrer"
+            >
+              YouTube
+            </a>
+          </p>
         </div>
         <div>
           <strong>Legal</strong>
