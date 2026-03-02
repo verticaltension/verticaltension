@@ -83,6 +83,11 @@ export default function Nav() {
           <NavLink to="/contact" onClick={() => setOpen(false)}>
             Contact
           </NavLink>
+          {!isAuthLoading && isAuthenticated && (
+            <NavLink to="/social-ops" onClick={() => setOpen(false)}>
+              Social Ops
+            </NavLink>
+          )}
           {isAuthLoading ? null : isAuthenticated ? (
             <NavLink
               className="account-mobile-link"

@@ -181,6 +181,18 @@ export default function Account() {
               </div>
             </form>
           </div>
+          <div className="card">
+            <h2>Social Operations</h2>
+            <p className="muted">
+              Open the social control plane to manage provider accounts, OAuth
+              connections, queue jobs, and posting telemetry.
+            </p>
+            <div className="form-actions">
+              <Link className="button ghost" to="/social-ops">
+                Open Social Ops
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

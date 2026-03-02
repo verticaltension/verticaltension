@@ -21,6 +21,8 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Withdrawal = lazy(() => import("./pages/Withdrawal"));
 const ShippingPayment = lazy(() => import("./pages/ShippingPayment"));
+const SocialOps = lazy(() => import("./pages/SocialOps"));
+const SocialOAuthCallback = lazy(() => import("./pages/SocialOAuthCallback"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
@@ -64,6 +66,11 @@ export default function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/withdrawal" element={<Withdrawal />} />
             <Route path="/shipping-payment" element={<ShippingPayment />} />
+            <Route path="/social-ops" element={<SocialOps />} />
+            <Route
+              path="/social-ops/oauth/:platform/callback"
+              element={<SocialOAuthCallback />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
