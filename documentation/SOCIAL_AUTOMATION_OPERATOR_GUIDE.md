@@ -119,3 +119,12 @@ Recovery actions:
 - Reddit: disabled pending API approval.
 - Instagram: disabled pending Facebook/Meta prerequisite recovery.
 - TikTok: onboarding in progress; review assets (video) may be required.
+
+## 12) Infrastructure Notes (2026-03-05)
+
+- Vertical Tension database is now isolated from Forgejo/CI.
+- Vertical Tension DB container: `verticaltension-postgres`.
+- Vertical Tension API container: `verticaltension-api` connected to `verticaltension-net`.
+- Forgejo/CI DB remains in separate container: `forgejo-postgres`.
+- Detailed incident and migration log:
+  - `documentation/POSTGRES_ISOLATION_IONOS_INCIDENT_2026-03-05.md`
