@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { getBlogPosts } from "../data/blogPosts";
+import { getBlogPosts, getRelatedBlogPosts } from "../data/blogPosts";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -91,29 +91,46 @@ export default function Blog() {
             </div>
           ) : (
             <div className="blog-grid">
-              {visiblePosts.map((post) => (
-              <article className="card blog-card" key={post.slug}>
-                <span className="badge">Post</span>
-                <h3>{post.title}</h3>
-                <p className="muted">{post.summary}</p>
-                <p className="blog-meta">
-                  {dateFormatter.format(new Date(post.publishedAt))} ·{" "}
-                  {post.readingTime}
-                </p>
-                <div className="blog-tag-row">
-                  {post.tags.map((tag) => (
-                    <span className="blog-tag" key={tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="button-row">
-                  <Link className="button primary" to={`/blog/${post.slug}`}>
-                    Read Post
-                  </Link>
-                </div>
-              </article>
-              ))}
+              {visiblePosts.map((post) => {
+                const related = getRelatedBlogPosts(post.slug, { limit: 3, minScore: 4 });
+
+                return (
+                  <article className="card blog-card" key={post.slug}>
+                    <span className="badge">Post</span>
+                    <h3>{post.title}</h3>
+                    <p className="muted">{post.summary}</p>
+                    <p className="blog-meta">
+                      {dateFormatter.format(new Date(post.publishedAt))} ·{" "}
+                      {post.readingTime}
+                    </p>
+                    <div className="blog-tag-row">
+                      {post.tags.map((tag) => (
+                        <span className="blog-tag" key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="button-row">
+                      <Link className="button primary" to={`/blog/${post.slug}`}>
+                        Read Post
+                      </Link>
+                    </div>
+
+                    {related.length > 0 && (
+                      <div className="blog-card-internal-links" aria-label="Related posts">
+                        <p className="muted blog-card-internal-links-title">Linked reads</p>
+                        <ul>
+                          {related.map((entry) => (
+                            <li key={entry.slug}>
+                              <Link to={`/blog/${entry.slug}`}>{entry.title}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           )}
         </div>

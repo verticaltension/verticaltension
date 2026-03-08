@@ -29,6 +29,14 @@ export interface BlogPost {
   cartItem?: BlogCartItem;
 }
 
+export interface BlogInternalLink {
+  slug: string;
+  title: string;
+  score: number;
+  sharedTags: string[];
+  sharedTerms: string[];
+}
+
 const BLOG_POSTS: BlogPost[] = [
   {
     slug: "hyperanthropism-completion-recursion-re-beginning",
@@ -7756,6 +7764,67 @@ export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return getResolvedBlogPosts().find((post) => post.slug === slug);
 }
 
+export function getRelatedBlogPosts(
+  slug: string,
+  options?: {
+    limit?: number;
+    minScore?: number;
+  },
+): BlogInternalLink[] {
+  const limit = Math.max(1, Math.min(12, options?.limit ?? 6));
+  const minScore = Math.max(1, options?.minScore ?? 4);
+  const posts = getResolvedBlogPosts();
+  const source = posts.find((post) => post.slug === slug);
+  if (!source) return [];
+
+  const sourceTagSet = normalizeTagSet(source.tags);
+  const sourceTokenSet = buildPostTokenSet(source);
+
+  return posts
+    .filter((candidate) => candidate.slug !== source.slug)
+    .map((candidate) => {
+      const candidateTagSet = normalizeTagSet(candidate.tags);
+      const candidateTokenSet = buildPostTokenSet(candidate);
+      const sharedTags = intersectSets(sourceTagSet, candidateTagSet);
+      const sharedTerms = intersectSets(sourceTokenSet, candidateTokenSet).slice(0, 5);
+      const dateDistanceDays = Math.abs(
+        Math.round((Date.parse(source.publishedAt) - Date.parse(candidate.publishedAt)) / 86400000),
+      );
+      const recencyBoost = dateDistanceDays <= 31 ? 1 : 0;
+      const score = sharedTags.length * 6 + sharedTerms.length * 2 + recencyBoost;
+
+      return {
+        slug: candidate.slug,
+        title: candidate.title,
+        score,
+        sharedTags,
+        sharedTerms,
+      } satisfies BlogInternalLink;
+    })
+    .filter((entry) => entry.score >= minScore)
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return a.title.localeCompare(b.title);
+    })
+    .slice(0, limit);
+}
+
+export function getBlogPostNeighbors(slug: string): {
+  newer: Pick<BlogPost, "slug" | "title"> | null;
+  older: Pick<BlogPost, "slug" | "title"> | null;
+} {
+  const posts = getBlogPosts();
+  const idx = posts.findIndex((post) => post.slug === slug);
+  if (idx < 0) {
+    return { newer: null, older: null };
+  }
+
+  return {
+    newer: posts[idx - 1] ? { slug: posts[idx - 1].slug, title: posts[idx - 1].title } : null,
+    older: posts[idx + 1] ? { slug: posts[idx + 1].slug, title: posts[idx + 1].title } : null,
+  };
+}
+
 type BlogPostOverride = Pick<BlogPost, "slug"> & Partial<BlogPost>;
 const DRAFT_OVERRIDE_INDEX = new Map(
   (DRAFT_BLOG_POST_OVERRIDES as BlogPostOverride[]).map((override, index) => [
@@ -7831,3 +7900,80 @@ function deriveDraftReadingTime(content: BlogContentBlock[]): string {
   const minutes = Math.max(1, Math.min(4, Math.ceil(words / 225)));
   return `${minutes} min read`;
 }
+
+function normalizeTagSet(tags: string[]): string[] {
+  return Array.from(
+    new Set(
+      tags
+        .map((tag) => normalizeToken(tag))
+        .filter(Boolean),
+    ),
+  );
+}
+
+function buildPostTokenSet(post: BlogPost): string[] {
+  const textParts: string[] = [post.title, post.summary];
+  for (const block of post.content.slice(0, 10)) {
+    if (block.type === "list") {
+      textParts.push(...block.items);
+    } else {
+      textParts.push(block.text);
+    }
+  }
+  const joined = textParts.join(" ");
+  return Array.from(
+    new Set(
+      joined
+        .split(/[^a-zA-Z0-9]+/g)
+        .map((token) => normalizeToken(token))
+        .filter((token) => token.length >= 5 && !STOP_WORDS.has(token)),
+    ),
+  ).slice(0, 80);
+}
+
+function normalizeToken(token: string): string {
+  return String(token || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+function intersectSets(a: string[], b: string[]): string[] {
+  const setB = new Set(b);
+  return a.filter((item) => setB.has(item));
+}
+
+const STOP_WORDS = new Set([
+  "about",
+  "above",
+  "across",
+  "after",
+  "again",
+  "against",
+  "along",
+  "among",
+  "because",
+  "being",
+  "below",
+  "between",
+  "could",
+  "every",
+  "first",
+  "further",
+  "human",
+  "humans",
+  "might",
+  "other",
+  "should",
+  "their",
+  "there",
+  "these",
+  "those",
+  "through",
+  "under",
+  "where",
+  "which",
+  "while",
+  "without",
+  "would",
+]);

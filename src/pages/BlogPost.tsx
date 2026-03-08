@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getBlogPostBySlug } from "../data/blogPosts";
+import {
+  getBlogPostBySlug,
+  getBlogPostNeighbors,
+  getRelatedBlogPosts,
+} from "../data/blogPosts";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -11,6 +15,8 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 export default function BlogPost() {
   const { slug } = useParams();
   const post = slug ? getBlogPostBySlug(slug) : undefined;
+  const relatedPosts = post ? getRelatedBlogPosts(post.slug, { limit: 8, minScore: 4 }) : [];
+  const neighbors = post ? getBlogPostNeighbors(post.slug) : { newer: null, older: null };
   const [shareStatus, setShareStatus] = useState("");
 
   if (!post) {
@@ -121,6 +127,48 @@ export default function BlogPost() {
               return <blockquote key={index}>{block.text}</blockquote>;
             })}
           </article>
+          {(neighbors.newer || neighbors.older || relatedPosts.length > 0) && (
+            <section className="card blog-internal-links" aria-label="Related internal links">
+              <div className="section-head blog-internal-links-head">
+                <h3>Continue Reading</h3>
+                <p className="muted">
+                  Internal links generated from shared themes, vocabulary overlap, and recency.
+                </p>
+              </div>
+
+              {(neighbors.newer || neighbors.older) && (
+                <div className="blog-neighbor-links">
+                  {neighbors.newer && (
+                    <Link className="blog-neighbor-link" to={`/blog/${neighbors.newer.slug}`}>
+                      Newer: {neighbors.newer.title}
+                    </Link>
+                  )}
+                  {neighbors.older && (
+                    <Link className="blog-neighbor-link" to={`/blog/${neighbors.older.slug}`}>
+                      Older: {neighbors.older.title}
+                    </Link>
+                  )}
+                </div>
+              )}
+
+              {relatedPosts.length > 0 && (
+                <ul className="blog-related-links-list">
+                  {relatedPosts.map((entry) => (
+                    <li key={entry.slug}>
+                      <Link className="blog-related-link" to={`/blog/${entry.slug}`}>
+                        {entry.title}
+                      </Link>
+                      <div className="blog-related-link-meta">
+                        score {entry.score}
+                        {entry.sharedTags.length > 0 ? ` · tags: ${entry.sharedTags.join(", ")}` : ""}
+                        {entry.sharedTerms.length > 0 ? ` · terms: ${entry.sharedTerms.join(", ")}` : ""}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
           <div className="button-row blog-share-row">
             <button
               className="button ghost"
