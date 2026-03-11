@@ -1,5 +1,6 @@
 import { siteIdentity } from "../config/siteIdentity";
 import { DRAFT_BLOG_POST_OVERRIDES } from "./blogDraftOverrides";
+import { ADDITIONAL_BLOG_POST_OVERRIDES } from "./blogAdditionalOverrides";
 
 export type BlogContentBlock =
   | { type: "paragraph"; text: string }
@@ -24,6 +25,7 @@ export interface BlogPost {
   readingTime: string;
   tags: string[];
   content: BlogContentBlock[];
+  relatedSlugs?: string[];
   draftHref?: string;
   reviewCopyEmail?: string;
   cartItem?: BlogCartItem;
@@ -7779,9 +7781,32 @@ export function getRelatedBlogPosts(
 
   const sourceTagSet = normalizeTagSet(source.tags);
   const sourceTokenSet = buildPostTokenSet(source);
+  const sourceManualRelated = new Set(source.relatedSlugs ?? []);
+  const postsBySlug = new Map(posts.map((post) => [post.slug, post] as const));
 
-  return posts
+  const manualEntries: BlogInternalLink[] = (source.relatedSlugs ?? [])
+    .map((relatedSlug, index) => ({ relatedSlug, index }))
+    .filter(({ relatedSlug }) => relatedSlug !== source.slug)
+    .map(({ relatedSlug, index }) => {
+      const candidate = postsBySlug.get(relatedSlug);
+      if (!candidate) {
+        return null;
+      }
+      const candidateTagSet = normalizeTagSet(candidate.tags);
+      const candidateTokenSet = buildPostTokenSet(candidate);
+      return {
+        slug: candidate.slug,
+        title: candidate.title,
+        score: 1000 - index,
+        sharedTags: intersectSets(sourceTagSet, candidateTagSet),
+        sharedTerms: intersectSets(sourceTokenSet, candidateTokenSet).slice(0, 5),
+      } satisfies BlogInternalLink;
+    })
+    .filter((entry): entry is BlogInternalLink => Boolean(entry));
+
+  const scoredEntries = posts
     .filter((candidate) => candidate.slug !== source.slug)
+    .filter((candidate) => !sourceManualRelated.has(candidate.slug))
     .map((candidate) => {
       const candidateTagSet = normalizeTagSet(candidate.tags);
       const candidateTokenSet = buildPostTokenSet(candidate);
@@ -7805,7 +7830,9 @@ export function getRelatedBlogPosts(
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       return a.title.localeCompare(b.title);
-    })
+    });
+
+  return [...manualEntries, ...scoredEntries]
     .slice(0, limit);
 }
 
@@ -7826,8 +7853,12 @@ export function getBlogPostNeighbors(slug: string): {
 }
 
 type BlogPostOverride = Pick<BlogPost, "slug"> & Partial<BlogPost>;
+const ALL_BLOG_POST_OVERRIDES: BlogPostOverride[] = [
+  ...(DRAFT_BLOG_POST_OVERRIDES as BlogPostOverride[]),
+  ...(ADDITIONAL_BLOG_POST_OVERRIDES as BlogPostOverride[]),
+];
 const DRAFT_OVERRIDE_INDEX = new Map(
-  (DRAFT_BLOG_POST_OVERRIDES as BlogPostOverride[]).map((override, index) => [
+  ALL_BLOG_POST_OVERRIDES.map((override, index) => [
     override.slug,
     index,
   ]),
@@ -7841,7 +7872,7 @@ function getResolvedBlogPosts(): BlogPost[] {
   const draftOverrideSlugs = new Set<string>();
   const draftOverridePublishedAt = new Map<string, string>();
 
-  for (const rawOverride of DRAFT_BLOG_POST_OVERRIDES as BlogPostOverride[]) {
+  for (const rawOverride of ALL_BLOG_POST_OVERRIDES) {
     draftOverrideSlugs.add(rawOverride.slug);
     if (rawOverride.publishedAt) {
       draftOverridePublishedAt.set(rawOverride.slug, rawOverride.publishedAt);
@@ -7868,11 +7899,14 @@ function getResolvedBlogPosts(): BlogPost[] {
       continue;
     }
 
-    bySlug.set(rawOverride.slug, {
+    const mergedRelatedSlugs = mergeRelatedSlugs(existing.relatedSlugs, rawOverride.relatedSlugs);
+    const mergedPost: BlogPost = {
       ...existing,
       ...rawOverride,
       slug: existing.slug,
-    });
+      ...(mergedRelatedSlugs ? { relatedSlugs: mergedRelatedSlugs } : {}),
+    };
+    bySlug.set(rawOverride.slug, mergedPost);
   }
 
   return Array.from(bySlug.values()).map((post) => {
@@ -7941,6 +7975,11 @@ function normalizeToken(token: string): string {
 function intersectSets(a: string[], b: string[]): string[] {
   const setB = new Set(b);
   return a.filter((item) => setB.has(item));
+}
+
+function mergeRelatedSlugs(base?: string[], override?: string[]): string[] | undefined {
+  const merged = Array.from(new Set([...(base ?? []), ...(override ?? [])]));
+  return merged.length > 0 ? merged : undefined;
 }
 
 const STOP_WORDS = new Set([

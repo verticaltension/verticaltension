@@ -126,5 +126,8 @@ Recovery actions:
 - Vertical Tension DB container: `verticaltension-postgres`.
 - Vertical Tension API container: `verticaltension-api` connected to `verticaltension-net`.
 - Forgejo/CI DB remains in separate container: `forgejo-postgres`.
+- Vertical Tension repo is integrated into Woodpecker CI/CD (`.woodpecker.yml`) with static deploy + API deploy + production smoke checks on `main`.
+- CI/CD operations guide:
+  - `documentation/CI_CD_CHAIN.md`
 - Detailed incident and migration log:
   - `documentation/POSTGRES_ISOLATION_IONOS_INCIDENT_2026-03-05.md`

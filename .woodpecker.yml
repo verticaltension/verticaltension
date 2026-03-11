@@ -1,0 +1,72 @@
+steps:
+  ci_build:
+    image: node:20-bookworm
+    commands:
+      - npm ci
+      - npm run ci
+    when:
+      event:
+        - push
+        - pull_request
+        - manual
+        - tag
+
+  deploy_static:
+    image: alpine:3.20
+    depends_on:
+      - ci_build
+    environment:
+      VTP_DEPLOY_HOST:
+        from_secret: vtp_deploy_host
+      VTP_DEPLOY_USER:
+        from_secret: vtp_deploy_user
+      VTP_SSH_PRIVATE_KEY:
+        from_secret: vtp_ssh_private_key
+    commands:
+      - apk add --no-cache openssh-client rsync
+      - sh scripts/cicd/deploy-static.sh
+    when:
+      event:
+        - push
+        - manual
+        - tag
+      branch:
+        - main
+
+  deploy_api:
+    image: alpine:3.20
+    depends_on:
+      - deploy_static
+    environment:
+      VTP_DEPLOY_HOST:
+        from_secret: vtp_deploy_host
+      VTP_DEPLOY_USER:
+        from_secret: vtp_deploy_user
+      VTP_SSH_PRIVATE_KEY:
+        from_secret: vtp_ssh_private_key
+    commands:
+      - apk add --no-cache openssh-client rsync nodejs npm
+      - sh scripts/cicd/deploy-api.sh
+    when:
+      event:
+        - push
+        - manual
+        - tag
+      branch:
+        - main
+
+  smoke_production:
+    image: curlimages/curl:8.10.1
+    depends_on:
+      - deploy_api
+    commands:
+      - curl --fail --silent --show-error --max-time 20 https://verticaltension.com/
+      - curl --fail --silent --show-error --max-time 20 https://app.verticaltension.com/
+      - curl --fail --silent --show-error --max-time 20 https://api.verticaltension.com/healthz
+    when:
+      event:
+        - push
+        - manual
+        - tag
+      branch:
+        - main

@@ -7,7 +7,9 @@
     "dev": "vite",
     "dev:server": "node server/index.js",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ci:server:check": "node scripts/ci/check-server-syntax.mjs",
+    "ci": "npm run ci:server:check && npm run build"
   },
   "dependencies": {
     "cors": "^2.8.5",

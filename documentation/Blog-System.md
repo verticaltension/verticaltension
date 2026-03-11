@@ -12,6 +12,8 @@ This project now uses a structured blog system with:
 All blog post content and metadata are stored in:
 
 - `src/data/blogPosts.ts`
+- `src/data/blogDraftOverrides.ts` (draft/source override layer)
+- `src/data/blogAdditionalOverrides.ts` (new long-form additions + reciprocal linking patches)
 
 Each post defines:
 
@@ -22,6 +24,7 @@ Each post defines:
 - `publishedAt`
 - `readingTime`
 - `tags`
+- Optional `relatedSlugs` (curated internal-link priority list)
 - Structured `content` blocks (paragraphs, subheadings, lists, quotes)
 - Optional actions (`draftHref`, `reviewCopyEmail`, `cartItem`)
 
@@ -46,6 +49,13 @@ Scoring model (deterministic):
 - shared tags: strong weight
 - shared normalized terms from title/summary/content: medium weight
 - close publication recency: small bonus
+
+Curated link override:
+
+- If a post defines `relatedSlugs`, those entries are injected first in `Continue Reading` / `Linked reads` before scored links.
+- Remaining slots are then filled by scored similarity links.
+- Override-layer `relatedSlugs` are merged additively with existing links (deduplicated) rather than replacing existing curated links.
+- Reciprocal curation is supported via lightweight override patches (slug + relatedSlugs only), so legacy posts can point back to newly published posts without rewriting their main content blocks.
 
 Defaults used in UI:
 

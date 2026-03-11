@@ -1,5 +1,22 @@
 # TODO
 
+## CI/CD (Activated 2026-03-11; final push pending)
+- Integrated Vertical Tension into Woodpecker CI/CD via `.woodpecker.yml`:
+  - CI on push/PR/manual/tag (`npm ci`, server syntax check, frontend build).
+  - CD on `main` (static deploy, API deploy, production smoke checks).
+- Added deployment automation scripts:
+  - `scripts/cicd/deploy-static.sh`
+  - `scripts/cicd/deploy-api.sh`
+- Added CI server syntax guard:
+  - `scripts/ci/check-server-syntax.mjs`
+  - `package.json` scripts: `ci:server:check`, `ci`
+- Added operator documentation:
+  - `documentation/CI_CD_CHAIN.md`
+- Activated repository in Woodpecker (`repo_id=1`), installed Forgejo webhook, and configured required deployment secrets.
+- Remaining finalization:
+  - Push `.woodpecker.yml` + `scripts/cicd/*` + related CI docs to `origin/main`.
+  - Re-run manual Woodpecker trigger and verify first end-to-end successful pipeline.
+
 ## Social Automation Roadmap - Remaining Work (2026-03-02)
 - Keep `SOCIAL_PUBLISH_MODE=stub` until each enabled platform passes live smoke test.
 - Complete TikTok review package (record and upload required product demo video).
