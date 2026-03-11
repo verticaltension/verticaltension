@@ -63,7 +63,7 @@ steps:
       - apk add --no-cache curl
       - curl --fail --silent --show-error --max-time 20 https://verticaltension.com/
       - curl --fail --silent --show-error --max-time 20 https://app.verticaltension.com/
-      - curl --fail --silent --show-error --max-time 20 https://api.verticaltension.com/healthz
+      - curl --fail --silent --show-error --max-time 20 https://api.verticaltension.com/api/health
     when:
       event:
         - push
