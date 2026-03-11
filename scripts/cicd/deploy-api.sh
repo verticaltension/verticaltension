@@ -54,15 +54,22 @@ ssh $SSH_BASE_ARGS "$VTP_DEPLOY_USER@$VTP_DEPLOY_HOST" \
 set -eu
 cd "$VTP_API_ROOT"
 
-if [ -f package-lock.json ]; then
-  npm ci --omit=dev
-else
-  npm install --omit=dev
-fi
-
 if [ -f docker-compose.yml ]; then
+  if ! command -v docker >/dev/null 2>&1; then
+    echo "[deploy-api] docker not found on host."
+    exit 1
+  fi
   docker compose up -d --build --remove-orphans
 elif command -v systemctl >/dev/null 2>&1 && systemctl list-unit-files --type=service | grep -q "^${VTP_API_SERVICE}\.service"; then
+  if ! command -v npm >/dev/null 2>&1; then
+    echo "[deploy-api] npm not found on host and no docker-compose fallback."
+    exit 1
+  fi
+  if [ -f package-lock.json ]; then
+    npm ci --omit=dev
+  else
+    npm install --omit=dev
+  fi
   systemctl restart "$VTP_API_SERVICE"
 else
   echo "[deploy-api] No restart target found (docker-compose.yml or systemd unit)."
