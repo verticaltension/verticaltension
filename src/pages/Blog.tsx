@@ -11,25 +11,61 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 export default function Blog() {
   const [query, setQuery] = useState("");
   const posts = getBlogPosts();
-  const normalizedQuery = query.trim().toLowerCase();
+  const normalizedQuery = normalizeSearchText(query);
+
+  const indexedPosts = useMemo(() => {
+    return posts.map((post) => {
+      const contentText = post.content
+        .map((block) => (block.type === "list" ? block.items.join(" ") : block.text))
+        .join(" ");
+
+      const searchableText = normalizeSearchText(
+        [
+          post.title,
+          post.summary,
+          post.author,
+          post.slug.replace(/-/g, " "),
+          post.tags.join(" "),
+          contentText,
+        ].join(" "),
+      );
+
+      const tokenSet = new Set(searchableText.split(" ").filter(Boolean));
+
+      return {
+        post,
+        searchableText,
+        tokenSet,
+      };
+    });
+  }, [posts]);
+
   const visiblePosts = useMemo(() => {
     if (!normalizedQuery) {
       return posts;
     }
 
-    return posts.filter((post) => {
-      const haystack = [
-        post.title,
-        post.summary,
-        post.author,
-        post.tags.join(" "),
-      ]
-        .join(" ")
-        .toLowerCase();
+    const queryTokens = Array.from(new Set(normalizedQuery.split(" ").filter(Boolean)));
+    return indexedPosts
+      .filter(({ searchableText, tokenSet }) => {
+        if (searchableText.includes(normalizedQuery)) {
+          return true;
+        }
 
-      return haystack.includes(normalizedQuery);
-    });
-  }, [normalizedQuery, posts]);
+        return queryTokens.every((token) => {
+          if (searchableText.includes(token)) {
+            return true;
+          }
+          for (const indexedToken of tokenSet) {
+            if (indexedToken.startsWith(token) || token.startsWith(indexedToken)) {
+              return true;
+            }
+          }
+          return false;
+        });
+      })
+      .map(({ post }) => post);
+  }, [indexedPosts, normalizedQuery, posts]);
 
   return (
     <div className="page">
@@ -61,10 +97,10 @@ export default function Blog() {
             <div className="blog-search-controls">
               <input
                 className="blog-search-input"
-                type="search"
+                type="text"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search by title, summary, or tag"
+                placeholder="Search by title, summary, content, tag, or slug"
                 aria-label="Search blog posts"
               />
               {query && (
@@ -137,4 +173,14 @@ export default function Blog() {
       </section>
     </div>
   );
+}
+
+function normalizeSearchText(value: string): string {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
 }
