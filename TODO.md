@@ -1,6 +1,6 @@
 # TODO
 
-## CI/CD (Activated 2026-03-11; final push pending)
+## CI/CD (Completed 2026-03-11)
 - Integrated Vertical Tension into Woodpecker CI/CD via `.woodpecker.yml`:
   - CI on push/PR/manual/tag (`npm ci`, server syntax check, frontend build).
   - CD on `main` (static deploy, API deploy, production smoke checks).
@@ -13,9 +13,9 @@
 - Added operator documentation:
   - `documentation/CI_CD_CHAIN.md`
 - Activated repository in Woodpecker (`repo_id=1`), installed Forgejo webhook, and configured required deployment secrets.
-- Remaining finalization:
-  - Push `.woodpecker.yml` + `scripts/cicd/*` + related CI docs to `origin/main`.
-  - Re-run manual Woodpecker trigger and verify first end-to-end successful pipeline.
+- Validation complete:
+  - Push-triggered pipeline and manual-triggered pipeline both run end-to-end successfully.
+  - Full chain verified: `ci_build` -> `deploy_static` -> `deploy_api` -> `smoke_production`.
 
 ## Social Automation Roadmap - Remaining Work (2026-03-02)
 - Keep `SOCIAL_PUBLISH_MODE=stub` until each enabled platform passes live smoke test.

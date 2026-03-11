@@ -31,12 +31,33 @@ Woodpecker activation has been completed for `verticaltension/verticaltension` o
   - `vtp_ssh_known_hosts`
 
 Important current gating item:
-- Manual pipeline trigger currently returns `Pipeline-Filtered: true` because `.woodpecker.yml` is not yet present on Forgejo `origin/main` (the file exists locally but has not been pushed to origin).
-- After pushing `.woodpecker.yml` and CI/CD scripts to `origin/main`, re-run a manual trigger and confirm pipeline execution.
+- Resolved: `.woodpecker.yml` and CI/CD scripts were pushed to Forgejo `origin/main`.
+- Manual trigger now works and produces full workflow execution.
 
 Operational note:
 - On this server build (`woodpecker-server 2.8.3`), the standard `POST /api/repos?forge_remote_id=<id>` activation path panicked for this org-owned repository.
 - Activation was recovered through controlled DB seeding + `POST /api/repos/{repo_id}/repair` to reconcile forge metadata and webhook setup.
+
+## 1.2 First-run verification results (2026-03-11)
+
+Pipeline history after activation:
+
+- `#1` (push) failed at `deploy_api`:
+  - Cause: remote host lacked `npm`; deployment script attempted host npm install before compose path.
+  - Fix: made `deploy_api` docker-first and only require npm in systemd fallback mode.
+- `#2` (push) failed at `smoke_production`:
+  - Cause: non-root `curlimages/curl` image could not write Woodpecker-injected `.netrc`.
+  - Fix: switched smoke step to `alpine` + `curl`.
+- `#3` (push) failed at `smoke_production`:
+  - Cause: API probe targeted `/healthz` while service exposes `/api/health`.
+  - Fix: updated smoke endpoint to `https://api.verticaltension.com/api/health`.
+
+Successful runs:
+
+- `#4` (push): **success** (`ci_build`, `deploy_static`, `deploy_api`, `smoke_production`)
+- `#5` (manual): **success** (same full chain)
+
+This confirms the Vertical Tension Forgejo -> Woodpecker CI/CD chain is now operational end-to-end.
 
 ## 2. Files added for CI/CD
 
