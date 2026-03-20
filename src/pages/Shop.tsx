@@ -1,8 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useStorefront } from "../context/StorefrontContext";
 import { catalog as fallbackCatalog, CatalogItem } from "../data/catalog";
-import { completedArc, remainingTitles } from "../data/shopTitles";
+import { completedArc, remainingTitles, ShopTitle } from "../data/shopTitles";
 import { apiUrl } from "../lib/api";
+
+function groupBySection(items: ShopTitle[]): { section: string; entries: ShopTitle[] }[] {
+  const map = new Map<string, ShopTitle[]>();
+  items.forEach((item) => {
+    if (!map.has(item.section)) map.set(item.section, []);
+    map.get(item.section)!.push(item);
+  });
+  return Array.from(map.entries()).map(([section, entries]) => ({ section, entries }));
+}
 
 
 
@@ -210,11 +219,23 @@ export default function Shop() {
             </p>
           </div>
           <div className="catalog-list">
-            {completedArc.map((item) => (
-              <article className="catalog-item" key={item.title}>
-                <h3>{item.title}</h3>
-                <p className="muted">{item.description}</p>
-              </article>
+            {groupBySection(completedArc).map(({ section, entries }) => (
+              <div key={section} className="catalog-section-group">
+                <p className="catalog-section-label">{section}</p>
+                {entries.map((item) => (
+                  <article className="catalog-item" key={item.title}>
+                    <h3>{item.title}</h3>
+                    <p className="muted">{item.description}</p>
+                    <div className="categories-tags">
+                      {item.categories.map((cat: string) => (
+                        <span key={cat} className="tag" onClick={() => toggleCategory(cat)}>
+                          {cat}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
             ))}
           </div>
           <p className="section-note">
@@ -237,11 +258,23 @@ export default function Shop() {
             </p>
           </div>
           <div className="catalog-list">
-            {remainingTitles.map((item) => (
-              <article className="catalog-item" key={item.title}>
-                <h3>{item.title}</h3>
-                <p className="muted">{item.description}</p>
-              </article>
+            {groupBySection(remainingTitles).map(({ section, entries }) => (
+              <div key={section} className="catalog-section-group">
+                <p className="catalog-section-label">{section}</p>
+                {entries.map((item) => (
+                  <article className="catalog-item" key={item.title}>
+                    <h3>{item.title}</h3>
+                    <p className="muted">{item.description}</p>
+                    <div className="categories-tags">
+                      {item.categories.map((cat: string) => (
+                        <span key={cat} className="tag" onClick={() => toggleCategory(cat)}>
+                          {cat}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
             ))}
           </div>
         </div>
