@@ -62,19 +62,6 @@ export default function Shop() {
     return ["All", ...Array.from(categorySet).sort()];
   }, []);
 
-  // Filter function for both completed and remaining titles
-  const filterTitles = (titles: typeof completedArc): typeof completedArc => {
-    if (selectedCategories.has("All")) {
-      return titles;
-    }
-    return titles.filter((title: typeof completedArc[0]) =>
-      title.categories.some((cat: string) => selectedCategories.has(cat))
-    );
-  };
-
-  const filteredCompleted = useMemo(() => filterTitles(completedArc), [selectedCategories]);
-  const filteredRemaining = useMemo(() => filterTitles(remainingTitles), [selectedCategories]);
-
   const toggleCategory = (category: string) => {
     const newSelection = new Set(selectedCategories);
     if (category === "All") {
@@ -131,8 +118,8 @@ export default function Shop() {
           <div className="section-head">
             <h2>Featured Titles</h2>
             <p>
-              Filter by series or discipline. The catalog is structured to scale
-              as new volumes are published.
+              Browse by the six organizing principles of the Recursive Corpus.
+              The catalog is structured to scale as new volumes are published.
             </p>
             {status === "loading" && (
               <p className="muted">Syncing the live catalog.</p>
@@ -142,12 +129,12 @@ export default function Shop() {
             )}
           </div>
           <div className="filter-row">
-            {categories.map((category) => (
+            {allCategories.map((category) => (
               <button
                 key={category}
                 className={`pill ${selectedCategories.has(category) ? "active" : ""}`}
                 type="button"
-                onClick={() => setSelectedCategories(new Set([category]))}
+                onClick={() => toggleCategory(category)}
               >
                 {category}
               </button>
@@ -210,30 +197,6 @@ export default function Shop() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <h2>Corpus Categories</h2>
-            <p>
-              Browse by the six organizing principles of the Recursive Corpus.
-              Filter across Completed Arc and Remaining Titles by selecting one or more categories.
-            </p>
-          </div>
-          <div className="filter-row">
-            {allCategories.map((category) => (
-              <button
-                key={category}
-                className={`pill ${selectedCategories.has(category) ? "active" : ""}`}
-                type="button"
-                onClick={() => toggleCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
             <h2>Completed Arc (2025)</h2>
             <p>
               Finalized in 2025. These titles constitute the first completed arc
@@ -248,23 +211,12 @@ export default function Shop() {
             </p>
           </div>
           <div className="catalog-list">
-            {filteredCompleted.length > 0 ? (
-              filteredCompleted.map((item) => (
-                <article className="catalog-item" key={item.title}>
-                  <h3>{item.title}</h3>
-                  <p className="muted">{item.description}</p>
-                  <div className="categories-tags">
-                    {item.categories.map((cat) => (
-                      <span key={cat} className="tag" onClick={() => toggleCategory(cat)}>
-                        {cat}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-              ))
-            ) : (
-              <p className="muted">No titles match the selected categories.</p>
-            )}
+            {completedArc.map((item) => (
+              <article className="catalog-item" key={item.title}>
+                <h3>{item.title}</h3>
+                <p className="muted">{item.description}</p>
+              </article>
+            ))}
           </div>
           <p className="section-note">
             All titles completed and finalized in 2025. Public record now
@@ -286,23 +238,12 @@ export default function Shop() {
             </p>
           </div>
           <div className="catalog-list">
-            {filteredRemaining.length > 0 ? (
-              filteredRemaining.map((item) => (
-                <article className="catalog-item" key={item.title}>
-                  <h3>{item.title}</h3>
-                  <p className="muted">{item.description}</p>
-                  <div className="categories-tags">
-                    {item.categories.map((cat) => (
-                      <span key={cat} className="tag" onClick={() => toggleCategory(cat)}>
-                        {cat}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-              ))
-            ) : (
-              <p className="muted">No titles match the selected categories.</p>
-            )}
+            {remainingTitles.map((item) => (
+              <article className="catalog-item" key={item.title}>
+                <h3>{item.title}</h3>
+                <p className="muted">{item.description}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
