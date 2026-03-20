@@ -87,60 +87,6 @@ export default function Shop() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <h2>Completed Arc (2025)</h2>
-            <p>
-              Finalized in 2025. These titles constitute the first completed arc
-              of the Recursive Corpus. Each framework is a standalone
-              architecture within the broader symbolic infrastructure of
-              Vertical Tension Press.
-            </p>
-            <p className="section-note">
-              All titles and frameworks are original works authored under the
-              Recursive Corpus project and published by Vertical Tension Press.
-              All rights reserved.
-            </p>
-          </div>
-          <div className="catalog-list">
-            {completedArc.map((item) => (
-              <article className="catalog-item" key={item.title}>
-                <h3>{item.title}</h3>
-                <p className="muted">{item.description}</p>
-              </article>
-            ))}
-          </div>
-          <p className="section-note">
-            All titles completed and finalized in 2025. Public record now
-            established.
-          </p>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <h2>Remaining Titles</h2>
-            <p>
-              Confirmed frameworks; pending full drafting or integration.
-              Canonically acknowledged as standalone volumes within the
-              Recursive Corpus. Descriptions reflect their role within
-              post-symbolic design, field epistemology, successor cognition, and
-              civilizational recursion.
-            </p>
-          </div>
-          <div className="catalog-list">
-            {remainingTitles.map((item) => (
-              <article className="catalog-item" key={item.title}>
-                <h3>{item.title}</h3>
-                <p className="muted">{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
             <h2>Featured Titles</h2>
             <p>
               Filter by series or discipline. The catalog is structured to scale
@@ -215,6 +161,60 @@ export default function Shop() {
                 </article>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <h2>Completed Arc (2025)</h2>
+            <p>
+              Finalized in 2025. These titles constitute the first completed arc
+              of the Recursive Corpus. Each framework is a standalone
+              architecture within the broader symbolic infrastructure of
+              Vertical Tension Press.
+            </p>
+            <p className="section-note">
+              All titles and frameworks are original works authored under the
+              Recursive Corpus project and published by Vertical Tension Press.
+              All rights reserved.
+            </p>
+          </div>
+          <div className="catalog-list">
+            {completedArc.map((item) => (
+              <article className="catalog-item" key={item.title}>
+                <h3>{item.title}</h3>
+                <p className="muted">{item.description}</p>
+              </article>
+            ))}
+          </div>
+          <p className="section-note">
+            All titles completed and finalized in 2025. Public record now
+            established.
+          </p>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <h2>Remaining Titles</h2>
+            <p>
+              Confirmed frameworks; pending full drafting or integration.
+              Canonically acknowledged as standalone volumes within the
+              Recursive Corpus. Descriptions reflect their role within
+              post-symbolic design, field epistemology, successor cognition, and
+              civilizational recursion.
+            </p>
+          </div>
+          <div className="catalog-list">
+            {remainingTitles.map((item) => (
+              <article className="catalog-item" key={item.title}>
+                <h3>{item.title}</h3>
+                <p className="muted">{item.description}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
