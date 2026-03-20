@@ -841,11 +841,27 @@ main {
   gap: 18px;
 }
 
+.catalog-section-group {
+  margin-bottom: 4px;
+}
+
+.catalog-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+  margin: 20px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
 .catalog-item {
   background: var(--card-bg);
   border-radius: 16px;
   padding: 22px;
   border: 1px solid var(--border);
+  max-width: 60%;
 }
 
 .catalog-item h3 {
@@ -856,6 +872,29 @@ main {
 .catalog-item p {
   margin: 0;
   line-height: 1.6;
+}
+
+.categories-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.tag {
+  font-size: 0.68rem;
+  background: var(--surface, var(--card-bg));
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tag:hover {
+  background: var(--accent, #444);
+  color: #fff;
 }
 
 .card ul {
