@@ -119,7 +119,6 @@ export default function Shop() {
             <h2>Featured Titles</h2>
             <p>
               Browse by the six organizing principles of the Recursive Corpus.
-              The catalog is structured to scale as new volumes are published.
             </p>
             {status === "loading" && (
               <p className="muted">Syncing the live catalog.</p>
