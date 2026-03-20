@@ -532,7 +532,7 @@ main {
 .card-grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .feature-split {
@@ -856,12 +856,30 @@ main {
   border-bottom: 1px solid var(--border);
 }
 
+.card-subtitle {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+
+.card-volume {
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin: 2px 0 6px;
+}
+
+.card-format {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
 .catalog-item {
   background: var(--card-bg);
   border-radius: 16px;
   padding: 22px;
   border: 1px solid var(--border);
-  max-width: 60%;
 }
 
 .catalog-item h3 {

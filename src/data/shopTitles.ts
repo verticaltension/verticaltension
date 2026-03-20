@@ -413,6 +413,13 @@ export const completedArc: ShopTitle[] = [
     section: "VI. Civilizational Architecture & Exo-Epistemology",
   },
   {
+    title: "Theoretical Sciences",
+    description:
+      "A multi-volume series traversing the full epistemological spectrum of scientific inquiry—from concrete empirical foundations through speculative, hyper-speculative, and meta-speculative theoretical frameworks. Each volume operationalises the Recursive Corpus' thermodynamic stratigraphy, treating scientific knowledge not as a fixed canon but as a layered architecture of increasing abstraction, recursion, and symbolic coherence.",
+    categories: ["Methodology", "Science", "Epistemology", "Speculative"],
+    section: "VII. Methodology & Scientific Architecture",
+  },
+  {
     title: "Recursive Science Codex",
     description:
       "Science is not a linear march toward truth—it is a recursive operation of observation, coherence-seeking, and symbolic compression. The Recursive Science Codex presents methodology not as procedure but as architecture: a layered, thermodynamic framework for how inquiry should be conducted across strata of concreteness, speculation, and meta-speculation. It encodes the principles of rigorous scientific cognition within the Recursive Corpus—establishing how new knowledge is generated, validated, and integrated into coherent symbolic fields without sacrificing epistemic integrity at the boundary of the known and the speculative.",

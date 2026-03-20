@@ -156,10 +156,16 @@ export default function Shop() {
               return (
                 <article className="card" key={item.id}>
                   <h3>{item.title}</h3>
+                  {item.subtitle && (
+                    <p className="card-subtitle">{item.subtitle}</p>
+                  )}
+                  {item.volumeLabel && (
+                    <p className="card-volume">{item.volumeLabel}</p>
+                  )}
                   <p className="muted">{item.description}</p>
+                  <p className="card-format">Available in {item.format}</p>
                   <div className="meta">
                     <span>{item.status}</span>
-                    <span>{item.format}</span>
                   </div>
                   <div className="button-row catalog-actions">
                     <button
@@ -226,13 +232,6 @@ export default function Shop() {
                   <article className="catalog-item" key={item.title}>
                     <h3>{item.title}</h3>
                     <p className="muted">{item.description}</p>
-                    <div className="categories-tags">
-                      {item.categories.map((cat: string) => (
-                        <span key={cat} className="tag" onClick={() => toggleCategory(cat)}>
-                          {cat}
-                        </span>
-                      ))}
-                    </div>
                   </article>
                 ))}
               </div>
@@ -265,13 +264,6 @@ export default function Shop() {
                   <article className="catalog-item" key={item.title}>
                     <h3>{item.title}</h3>
                     <p className="muted">{item.description}</p>
-                    <div className="categories-tags">
-                      {item.categories.map((cat: string) => (
-                        <span key={cat} className="tag" onClick={() => toggleCategory(cat)}>
-                          {cat}
-                        </span>
-                      ))}
-                    </div>
                   </article>
                 ))}
               </div>
